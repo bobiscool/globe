@@ -10,13 +10,13 @@
 <script>
   import THREELib from "three-js";
   import dat from "dat-gui"
-  import IDR from "js2/data.js"
+  import IDR from "sta/js2/data.js"
   import $ from "jquery"
   import world from "img/world.jpg"
-  import data from "sta/data/1.json"
+  import data from "sta/js2/CityData.js"
   var THREE = THREELib(); // return THREE JS
-  import DAT from "js2/globe.js"
-  import Detector from "js2/Detector.js"
+  import DAT from "sta/js2/globeWU.js"
+  import Detector from "sta/js2/Detector.js"
 //  import TWEEN from "tween"
   var TWEEN = require('tween.js');
   console.log(data);
@@ -29,18 +29,7 @@ export default {
   },
   mounted:function () {
    var n =0;
-    var setTime = function (globe,t) {
-      return function () {
-        var ani= new TWEEN.Tween(globe);
-        ani.to({"time": t},10000);
-        ani.easing(TWEEN.Easing.Elastic.InOut);
-        ani.start();
-        console.log(new TWEEN.Tween(globe));
-//          console.log("complete");
-//        globe.time = t;
-      }
-    }
-//    TWEEN.start();
+
     console.log(TWEEN);
 
     if(!Detector.webgl){
@@ -60,22 +49,14 @@ export default {
 
 //            var data = JSON.parse(data);
             window.data = data;
-            for (i=0;i<data.length;i++) {
-              globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
+            for (i=0;i<data["phase1"].length;i++) {
+              globe.addData(data["phase1"][i], {format: 'magnitude', name: "hehe", animated: false});
             }
             globe.createPoints();
-            setTime(globe,0)();
 //            console.log("settime",setTime(globe,0));
 
 
 
-      setInterval(function () {
-        n++;
-        setTime(globe,n)();
-        if(n>=2){
-            n=0;
-        }
-      },10000);
 
 
             globe.animate();

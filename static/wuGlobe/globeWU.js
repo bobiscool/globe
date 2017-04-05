@@ -192,7 +192,6 @@ DAT.Globe = function(container, opts) {
   }
 
   function addData(data, opts) {
-    // console.log("opts",data);
     var lat, lng, size, color, i, step, colorFnWrapper;
 
     opts.animated = opts.animated || false;
@@ -208,48 +207,16 @@ DAT.Globe = function(container, opts) {
       throw('error: format not supported: '+opts.format);
     }
 
-
-
-
-
-    // if (opts.animated) {
-    //   if (this._baseGeometry === undefined) {
-    //     this._baseGeometry = new THREE.Geometry();
-    //     for (i = 0; i < data.length; i += step) {
-    //       lat = data[i];
-    //       lng = data[i + 1];
-    //    size = data[i + 2];
-    //       color = colorFnWrapper(data,i);
-    //       // size = 0;
-    //       addPoint(lat, lng, size, color, this._baseGeometry);
-    //     }
-    //   }
-    //   if(this._morphTargetId === undefined) {
-    //     this._morphTargetId = 0;
-    //   } else {
-    //     this._morphTargetId += 1;
-    //     // 一定要注意这里的this 是DAT
-    //   }
-    //   opts.name = opts.name || 'morphTarget'+this._morphTargetId;
-    // }
-    //
-    //
     var subgeo = new THREE.Geometry();
-    for (i = 0; i < data.length; i += step) {
-      lat = data[i];
-      lng = data[i + 1];
-      color = colorFnWrapper(data,i);
-      size = data[i + 2];
-      size = size*200;
+    // for (i = 0; i < data.length; i += step) {
+      lat = data.lat;
+      lng = data.lng;
+      color =  0xffffff;
+      size = 100;
       addPoint(lat, lng, size, color, subgeo);
-    }
-    //
-    // if (opts.animated) {
-    //   this._baseGeometry.morphTargets.push({'name': opts.name, vertices: subgeo.vertices});
-    // } else {
-      this._baseGeometry = subgeo;
     // }
 
+      this._baseGeometry = subgeo;
 
 
 
@@ -316,12 +283,16 @@ DAT.Globe = function(container, opts) {
     if(point.matrixAutoUpdate){
       point.updateMatrix();
     }
-    subgeo.merge(point.geometry, point.matrix);
-    if(!once){
-      console.log("sugeo");
-      console.dir(subgeo);
-      once = true;
-    }
+    // subgeo.merge(point.geometry, point.matrix);
+    // // if(!once){
+    // //   console.log("sugeo");
+    // //   console.dir(subgeo);
+    // //   once = true;
+    // // // }
+    //
+    // console.log("sugeo",subgeo)
+
+    scene.add(point);
   }
 
   function onMouseDown(event) {
