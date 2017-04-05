@@ -10,13 +10,13 @@
 <script>
   import THREELib from "three-js";
   import dat from "dat-gui"
-  import IDR from "js/data.js"
+  import IDR from "js2/data.js"
   import $ from "jquery"
   import world from "img/world.jpg"
   import data from "sta/data/1.json"
   var THREE = THREELib(); // return THREE JS
-  import DAT from "js/globe.js"
-  import Detector from "js/Detector.js"
+  import DAT from "js2/globe.js"
+  import Detector from "js2/Detector.js"
 //  import TWEEN from "tween"
   var TWEEN = require('tween.js');
   console.log(data);
