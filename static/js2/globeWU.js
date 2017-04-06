@@ -72,8 +72,8 @@ DAT.Globe = function(container, opts) {
   };
 
   var camera, scene, renderer, w, h;
-  var mesh, atmosphere, point,globe,flag;
-
+  var mesh, atmosphere, point,globe,flag,plane;
+// TODO var区域
   var overRenderer;
 
   var curZoomSpeed = 0;
@@ -109,7 +109,7 @@ DAT.Globe = function(container, opts) {
     scene.add( axisHelper );
 
 
-// 创建地球
+//TODO  创建地球
 
     var geometry = new THREE.SphereGeometry(200, 40, 30);
 
@@ -167,8 +167,16 @@ DAT.Globe = function(container, opts) {
     geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-0.5));// 做了一些metrix变换
 
     point = new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({
-      color: 0xffffff
+      color: 0xfdcfdc
     }));
+
+
+    var planeGeo = new THREE.PlaneGeometry(5,10,3,3);
+    var planeMat = new THREE.MeshBasicMaterial({color:0xffffff,side:THREE.DoubleSide});
+    plane = new THREE.Mesh(planeGeo,planeMat);
+
+
+
 
 
    flag = new THREE.Vector3(0,0,0);
@@ -209,8 +217,8 @@ DAT.Globe = function(container, opts) {
 
       lat = data.lat;
       lng = data.lng;
-      color =  0xffffff;
-      size = 100;
+      color =  0xfdcfdc;
+      size = 50;
       addPoint(lat, lng, size, color);
 
   };
@@ -233,6 +241,18 @@ DAT.Globe = function(container, opts) {
     console.log(point2);
    //TODO 添加点位
     scene.add(point2);
+
+
+
+    plane.position.x = 300 * Math.sin(phi) * Math.cos(theta);
+    plane.position.y = 300 * Math.cos(phi);
+    plane.position.z = 300 * Math.sin(phi) * Math.sin(theta);
+    var plane2 = plane.clone();
+    plane2.lookAt(flag);
+    scene.add(plane2);
+
+    // todo 添加平面
+
 
     // // 朝向   调节 rotation用的
     // point.lookAt(mesh.position);
