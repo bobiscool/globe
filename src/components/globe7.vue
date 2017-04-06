@@ -102,8 +102,8 @@ export default {
   }
 
   #container {
-    width: 1000px;
-    height: 600px;
+    width: 1600px;
+    height: 800px;
   }
 
 

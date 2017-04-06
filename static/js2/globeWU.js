@@ -72,7 +72,7 @@ DAT.Globe = function(container, opts) {
   };
 
   var camera, scene, renderer, w, h;
-  var mesh, atmosphere, point,globe;
+  var mesh, atmosphere, point,globe,flag;
 
   var overRenderer;
 
@@ -130,8 +130,8 @@ DAT.Globe = function(container, opts) {
 
 
     globe = new THREE.Mesh(geometry, material);
-    globe.rotation.y = Math.PI;
-    scene.add(globe);
+    // globe.rotation.y = Math.PI;
+    // scene.add(globe);
 
 
    // TODO 添加大气层
@@ -153,10 +153,13 @@ DAT.Globe = function(container, opts) {
 
     mesh = new THREE.Mesh(geometry, material);
     mesh.scale.set( 1.1, 1.1, 1.1 );
+    var group = new THREE.Group();
+    group.add(globe);
+    group.add(mesh);
+    // group.position.x = 500;
 
+    scene.add(group);
 
-
-    scene.add(mesh);
 
 
 
@@ -167,6 +170,8 @@ DAT.Globe = function(container, opts) {
       color: 0xffffff
     }));
 
+
+   flag = new THREE.Vector3(0,0,0);
 
     //TODO  创建点
 
@@ -205,7 +210,7 @@ DAT.Globe = function(container, opts) {
       lat = data.lat;
       lng = data.lng;
       color =  0xffffff;
-      size = 2;
+      size = 100;
       addPoint(lat, lng, size, color);
 
   };
@@ -222,13 +227,11 @@ DAT.Globe = function(container, opts) {
     point.position.y = 200 * Math.cos(phi);
     point.position.z = 200 * Math.sin(phi) * Math.sin(theta);
     point.scale.z = Math.max( size, 0.1 );
-    point.lookAt(globe);
 
     var point2 = point.clone();
-
-
-
-    console.log(point);
+    point2.lookAt(flag);
+    console.log(point2);
+   //TODO 添加点位
     scene.add(point2);
 
     // // 朝向   调节 rotation用的
