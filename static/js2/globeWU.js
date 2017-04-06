@@ -1,12 +1,21 @@
-
+// 根据web gllobe加以拓展的 globe
 import THREELib from "three-js";
 var THREE = THREELib();
 var TWEEN = require('tween.js');
 import world from "img/world.jpg"
+import earth from "img/earth.jpg"
+import earth_line from "img/earth_outline.png"
+import texture from "img/news_button_gray.png"
+import fire1Img from "img/fire1.png"
+import fire2Img from "img/fire2.png"
+import fire3Img from "img/fire3.png"
+import fire4Img from "img/fire4.png"
+import texture2 from "img/1_1.png"
 var DAT = DAT || {};
 import dat from "dat-gui"
 var once = false;
 var carmZ=0;
+
 
 DAT.Globe = function(container, opts) {
   opts = opts || {};
@@ -73,6 +82,8 @@ DAT.Globe = function(container, opts) {
 
   var camera, scene, renderer, w, h;
   var mesh, atmosphere, point,globe,flag,plane;
+  var shader, uniforms, material;
+  var dirLight1,dirLight2;
 // TODO var区域
   var overRenderer;
 
@@ -88,6 +99,17 @@ DAT.Globe = function(container, opts) {
   var padding = 40;
   var PI_HALF = Math.PI / 2;
 
+
+
+
+
+
+
+
+
+
+
+
   function init() {
 
 
@@ -96,7 +118,6 @@ DAT.Globe = function(container, opts) {
     container.style.color = '#fff';
     container.style.font = '13px/20px Arial, sans-serif';
 
-    var shader, uniforms, material;
     w = container.offsetWidth || window.innerWidth;
     h = container.offsetHeight || window.innerHeight;
 
@@ -111,59 +132,13 @@ DAT.Globe = function(container, opts) {
 
 //TODO  创建地球
 
-    var geometry = new THREE.SphereGeometry(200, 40, 30);
 
-    shader = Shaders['earth'];
-    uniforms = THREE.UniformsUtils.clone(shader.uniforms);
-
-    uniforms['texture'].value = THREE.ImageUtils.loadTexture(world);
-
-// 贴皮肤
-
-    material = new THREE.ShaderMaterial({
-
-          uniforms: uniforms,
-          vertexShader: shader.vertexShader,
-          fragmentShader: shader.fragmentShader
-
-        });
-
-
-    globe = new THREE.Mesh(geometry, material);
-    // globe.rotation.y = Math.PI;
-    // scene.add(globe);
-
-
-   // TODO 添加大气层
-    shader = Shaders['atmosphere'];
-    uniforms = THREE.UniformsUtils.clone(shader.uniforms);
-
-    material = new THREE.ShaderMaterial({
-
-          uniforms: uniforms,
-          vertexShader: shader.vertexShader,
-          fragmentShader: shader.fragmentShader,
-          side: THREE.BackSide,
-          blending: THREE.AdditiveBlending,
-          transparent: true
-
-        });
+    addEarth();
+    addLights();
 
 
 
-    mesh = new THREE.Mesh(geometry, material);
-    mesh.scale.set( 1.1, 1.1, 1.1 );
-    var group = new THREE.Group();
-    group.add(globe);
-    group.add(mesh);
-    // group.position.x = 500;
-
-    scene.add(group);
-
-
-
-
-    geometry = new THREE.BoxGeometry(0.5,0.5, 1);
+   var  geometry = new THREE.BoxGeometry(0.5,0.5, 1);
     geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-0.5));// 做了一些metrix变换
 
     point = new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({
@@ -171,10 +146,9 @@ DAT.Globe = function(container, opts) {
     }));
 
 
-    var planeGeo = new THREE.PlaneGeometry(5,10,3,3);
-    var planeMat = new THREE.MeshBasicMaterial({color:0xffffff,side:THREE.DoubleSide});
+    var planeGeo = new THREE.PlaneGeometry(40,20,3,3);
+    var planeMat = new THREE.MeshLambertMaterial({side:THREE.BackSide,map: new THREE.TextureLoader().load(texture2), transparent:true, opacity:1 , blending:THREE.AdditiveBlending});
     plane = new THREE.Mesh(planeGeo,planeMat);
-
 
 
 
@@ -211,6 +185,98 @@ DAT.Globe = function(container, opts) {
     }, false);
   }
 
+
+
+
+  function addEarth() {
+    //TODO 贴图的地球
+    var geometry = new THREE.SphereGeometry(200, 50, 50);
+
+    shader = Shaders['earth'];
+    uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+
+    uniforms['texture'].value = THREE.ImageUtils.loadTexture(earth);
+
+// 贴皮肤
+
+    material = new THREE.ShaderMaterial({
+
+      uniforms: uniforms,
+      vertexShader: shader.vertexShader,
+      fragmentShader: shader.fragmentShader
+
+    });
+
+
+    globe = new THREE.Mesh(geometry, material);
+    // globe.rotation.y = Math.PI;
+    scene.add(globe);
+
+
+    // TODO 添加大气层
+    shader = Shaders['atmosphere'];
+    uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+
+    material = new THREE.ShaderMaterial({
+
+      uniforms: uniforms,
+      vertexShader: shader.vertexShader,
+      fragmentShader: shader.fragmentShader,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
+      transparent: true
+    });
+
+
+
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.scale.set( 1.05, 1.05, 1.05 );
+    // scene.add(mesh)
+
+
+
+
+    // TODO 边框层
+    var geo = new THREE.SphereGeometry(210, 50, 50);
+    var mat = new THREE.MeshBasicMaterial({blending:THREE.AdditiveBlending , transparent:true, color:0x2AC7CC, opacity:.9, map: new THREE.TextureLoader().load(earth_line)});
+    var earthPol = new THREE.Mesh(geo,mat);
+    var earthPol2=earthPol.clone();
+
+    scene.add(earthPol);
+    scene.add(earthPol2);
+
+
+
+    // TODO 添加火焰区域
+
+    var geo = new THREE.SphereGeometry(201, 50, 50);
+    var fire1 = new THREE.TextureLoader().load(fire1Img);
+    var fire2 = new THREE.TextureLoader().load(fire2Img);
+    var fire3 = new THREE.TextureLoader().load(fire3Img);
+    var fire4 = new THREE.TextureLoader().load(fire4Img);
+    var mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:.4, map: fire1 });
+    var earthC1 = new THREE.Mesh(geo,mat);
+    scene.add(earthC1);
+
+    mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:.4, map: fire2 });
+    var earthC2 = new THREE.Mesh(geo,mat);
+    scene.add(earthC2);
+
+    mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:.4, map: fire3 });
+    var  earthC3 = new THREE.Mesh(geo,mat);
+    scene.add(earthC3);
+
+    mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:1, map: fire4 });
+    var earthC4 = new THREE.Mesh(geo,mat);
+    scene.add(earthC4);
+
+
+
+
+
+  }
+
+
   function addData(data, opts) {
     var lat, lng, size, color, i, step, colorFnWrapper;
 
@@ -244,9 +310,9 @@ DAT.Globe = function(container, opts) {
 
 
 
-    plane.position.x = 300 * Math.sin(phi) * Math.cos(theta);
-    plane.position.y = 300 * Math.cos(phi);
-    plane.position.z = 300 * Math.sin(phi) * Math.sin(theta);
+    plane.position.x = 250 * Math.sin(phi) * Math.cos(theta);
+    plane.position.y = 250 * Math.cos(phi);
+    plane.position.z = 250 * Math.sin(phi) * Math.sin(theta);
     var plane2 = plane.clone();
     plane2.lookAt(flag);
     scene.add(plane2);
@@ -314,7 +380,19 @@ DAT.Globe = function(container, opts) {
 
 
 
+  function addLights() {
+    //TODO  添加光源
+    dirLight1 = new THREE.PointLight(0xD0FDFF,1.1,0);
+    dirLight1.position.set(0, 0, 600);
+    dirLight1.lookAt(0,0,0);
+    scene.add(dirLight1);
 
+
+    dirLight2 = new THREE.DirectionalLight(0x7efaff,1);
+    dirLight2.position.set(400,400,100);
+    //dirLight2.lookAt(camera);
+    scene.add(dirLight2);
+  }
 
 
 
