@@ -254,15 +254,15 @@ DAT.Globe = function(container, opts) {
     var fire2 = new THREE.TextureLoader().load(fire2Img);
     var fire3 = new THREE.TextureLoader().load(fire3Img);
     var fire4 = new THREE.TextureLoader().load(fire4Img);
-    var mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:.4, map: fire1 });
+    var mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:1, map: fire1 });
     var earthC1 = new THREE.Mesh(geo,mat);
     scene.add(earthC1);
 
-    mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:.4, map: fire2 });
+    mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:1, map: fire2 });
     var earthC2 = new THREE.Mesh(geo,mat);
     scene.add(earthC2);
 
-    mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:.4, map: fire3 });
+    mat = new THREE.MeshLambertMaterial({transparent:true, color:0xff8340, blending:THREE.AdditiveBlending, opacity:1, map: fire3 });
     var  earthC3 = new THREE.Mesh(geo,mat);
     scene.add(earthC3);
 
@@ -270,6 +270,14 @@ DAT.Globe = function(container, opts) {
     var earthC4 = new THREE.Mesh(geo,mat);
     scene.add(earthC4);
 
+    //TODO 添加外框 edgeshelper 添加网格
+    var geo2 = new THREE.SphereGeometry(200+15, 40, 30);
+    var mat2 = new THREE.MeshLambertMaterial({transparent:true, color:0x2AC7CC, blending:THREE.AdditiveBlending, opacity:.4, });
+    var egh2 = new THREE.EdgesHelper( new THREE.Mesh(geo2,mat2), 0x2AC7CC );
+    egh2.material.linewidth = .5;
+    egh2.material.transparent = true;
+    egh2.material.opacity = .5;
+    scene.add(egh2);
 
 
 
@@ -376,6 +384,12 @@ DAT.Globe = function(container, opts) {
 
       console.log(this.points);
     }
+  }
+
+  function addLabel() {
+    //TODO 添加label 根据城市的经纬度 随机高矮
+
+
   }
 
 
