@@ -11,6 +11,7 @@ import fire2Img from "img/fire2.png"
 import fire3Img from "img/fire3.png"
 import fire4Img from "img/fire4.png"
 import texture2 from "img/1_1.png"
+import year2016 from "img/year/2016.png"
 var DAT = DAT || {};
 import dat from "dat-gui"
 var once = false;
@@ -84,6 +85,7 @@ DAT.Globe = function(container, opts) {
   var mesh, atmosphere, point,globe,flag,plane;
   var shader, uniforms, material;
   var dirLight1,dirLight2;
+  var yr=2000;
 // TODO var区域
   var overRenderer;
 
@@ -141,8 +143,11 @@ DAT.Globe = function(container, opts) {
    var  geometry = new THREE.BoxGeometry(0.5,0.5, 1);
     geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-0.5));// 做了一些metrix变换
 
-    point = new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({
-      color: 0xfdcfdc
+    point = new THREE.Mesh(geometry,new THREE.MeshLambertMaterial({
+      color: 0x5CACC4,
+      transparent:true,
+      opacity:0.8,
+      blending:THREE.AdditiveBlending
     }));
 
 
@@ -279,7 +284,57 @@ DAT.Globe = function(container, opts) {
     egh2.material.opacity = .5;
     scene.add(egh2);
 
+    // todo 添加赤道外环线
 
+    var ring = new THREE.Object3D();
+    var r = 260;
+    var t = Math.PI/180 *2;
+    var mat = new THREE.LineBasicMaterial( {  linewidth:.5, color: 0x6FD5F0, transparent:true , opacity:.4} );
+
+    var lineGeo = new THREE.Geometry();
+    for (var i=0; i<180; i++){
+      var x = r*Math.cos(t*i);
+      var z = r*Math.sin(t*i);
+
+      lineGeo.vertices.push(new THREE.Vector3(x*.985,0,z*.985));
+      lineGeo.vertices.push(new THREE.Vector3(x,0,z));
+
+      if(i%5==0){
+
+        lineGeo.vertices.push(new THREE.Vector3(x*.965,0,z*.965));
+        lineGeo.vertices.push(new THREE.Vector3(x,0,z));
+        lineGeo.vertices.push(new THREE.Vector3(x*.965,0,z*.965));
+        lineGeo.vertices.push(new THREE.Vector3(x,0,z));
+
+      }
+
+      if(Math.floor((Math.random() * 10) + 1) == 1){
+
+        lineGeo.vertices.push(new THREE.Vector3(x,0,z));
+        lineGeo.vertices.push(new THREE.Vector3(x,5,z));
+
+      }
+
+      if(i%10==0){
+        var pgeo = new THREE.PlaneGeometry(6,3);
+        var pmat = new THREE.MeshPhongMaterial({map: new THREE.TextureLoader().load(year2016), transparent:true, opacity:1, side:THREE.DoubleSide});
+        var p = new THREE.Mesh(pgeo,pmat);
+
+        p.position.x = x * 1.02 ;
+        p.position.z = z * 1.02 ;
+        p.position.y = -1;
+        p.lookAt(new THREE.Vector3(0,0,0));
+        ring.add(p);
+        // yr++;
+      }
+
+
+    }
+
+    var line = new THREE.LineSegments(lineGeo, mat);
+//添加线性分割点
+    ring.add(line);
+    scene.add(ring);
 
 
   }
@@ -292,7 +347,7 @@ DAT.Globe = function(container, opts) {
       lat = data.lat;
       lng = data.lng;
       color =  0xfdcfdc;
-      size = 50;
+      size = 100;
       addPoint(lat, lng, size, color);
 
   };

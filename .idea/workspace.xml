@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cf1a6d67-4aae-4fbf-88ee-1acfff2c1d6c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/js2/globeWU.js" afterPath="$PROJECT_DIR$/static/js2/globeWU.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -23,27 +22,40 @@
           <file leaf-file-name="globeWU.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/static/js2/globeWU.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="322">
-                  <caret line="278" column="31" lean-forward="false" selection-start-line="278" selection-start-column="31" selection-end-line="278" selection-end-column="31" />
+                <state relative-caret-position="168">
+                  <caret line="349" column="16" lean-forward="false" selection-start-line="349" selection-start-column="16" selection-end-line="349" selection-end-column="16" />
                   <folding>
-                    <element signature="e#1008#2447#0" expanded="false" />
-                    <element signature="e#7758#7947#0" expanded="false" />
-                    <element signature="e#7995#9171#0" expanded="false" />
-                    <element signature="e#9200#10533#0" expanded="false" />
-                    <element signature="e#10997#11394#0" expanded="false" />
-                    <element signature="e#11426#11800#0" expanded="false" />
-                    <element signature="e#11830#12070#0" expanded="false" />
-                    <element signature="e#12101#12304#0" expanded="false" />
-                    <element signature="e#12337#12455#0" expanded="false" />
-                    <element signature="e#12493#12696#0" expanded="false" />
-                    <element signature="e#12733#12914#0" expanded="false" />
-                    <element signature="e#12939#13107#0" expanded="false" />
-                    <element signature="e#13130#13205#0" expanded="false" />
-                    <element signature="e#13250#13988#0" expanded="false" />
-                    <element signature="e#14071#14131#0" expanded="false" />
-                    <element signature="e#14179#14996#0" expanded="false" />
+                    <element signature="e#117#150#0" expanded="true" />
+                    <element signature="e#1049#2488#0" expanded="false" />
+                    <element signature="e#10824#12157#0" expanded="false" />
+                    <element signature="e#12621#13018#0" expanded="false" />
+                    <element signature="e#13050#13424#0" expanded="false" />
+                    <element signature="e#13454#13694#0" expanded="false" />
+                    <element signature="e#13725#13928#0" expanded="false" />
+                    <element signature="e#13961#14079#0" expanded="false" />
+                    <element signature="e#14117#14320#0" expanded="false" />
+                    <element signature="e#14357#14538#0" expanded="false" />
+                    <element signature="e#14563#14731#0" expanded="false" />
+                    <element signature="e#14754#14829#0" expanded="false" />
+                    <element signature="e#14874#15612#0" expanded="false" />
+                    <element signature="e#15695#15755#0" expanded="false" />
+                    <element signature="e#15803#16620#0" expanded="false" />
                   </folding>
                 </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="1_1.png" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/static/img/1_1.png">
+              <provider selected="true" editor-type-id="images">
+                <state />
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="2016.png" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/static/img/year/2016.png">
+              <provider selected="true" editor-type-id="images">
+                <state />
               </provider>
             </entry>
           </file>
@@ -55,24 +67,24 @@
             <entry file="file://$PROJECT_DIR$/static/js2/globeWU.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="20">
-                  <caret line="204" column="40" lean-forward="false" selection-start-line="204" selection-start-column="40" selection-end-line="204" selection-end-column="40" />
+                  <caret line="209" column="40" lean-forward="false" selection-start-line="209" selection-start-column="40" selection-end-line="209" selection-end-column="40" />
                   <folding>
-                    <element signature="e#1008#2447#0" expanded="false" />
-                    <element signature="e#7758#7947#0" expanded="false" />
-                    <element signature="e#7995#9171#0" expanded="false" />
-                    <element signature="e#9200#10533#0" expanded="false" />
-                    <element signature="e#10997#11394#0" expanded="false" />
-                    <element signature="e#11426#11800#0" expanded="false" />
-                    <element signature="e#11830#12070#0" expanded="false" />
-                    <element signature="e#12101#12304#0" expanded="false" />
-                    <element signature="e#12337#12455#0" expanded="false" />
-                    <element signature="e#12493#12696#0" expanded="false" />
-                    <element signature="e#12733#12914#0" expanded="false" />
-                    <element signature="e#12939#13107#0" expanded="false" />
-                    <element signature="e#13130#13205#0" expanded="false" />
-                    <element signature="e#13250#13988#0" expanded="false" />
-                    <element signature="e#14071#14131#0" expanded="false" />
-                    <element signature="e#14179#14996#0" expanded="false" />
+                    <element signature="e#1049#2488#0" expanded="false" />
+                    <element signature="e#9381#9571#0" expanded="false" />
+                    <element signature="e#9619#10795#0" expanded="false" />
+                    <element signature="e#10824#12157#0" expanded="false" />
+                    <element signature="e#12621#13018#0" expanded="false" />
+                    <element signature="e#13050#13424#0" expanded="false" />
+                    <element signature="e#13454#13694#0" expanded="false" />
+                    <element signature="e#13725#13928#0" expanded="false" />
+                    <element signature="e#13961#14079#0" expanded="false" />
+                    <element signature="e#14117#14320#0" expanded="false" />
+                    <element signature="e#14357#14538#0" expanded="false" />
+                    <element signature="e#14563#14731#0" expanded="false" />
+                    <element signature="e#14754#14829#0" expanded="false" />
+                    <element signature="e#14874#15612#0" expanded="false" />
+                    <element signature="e#15695#15755#0" expanded="false" />
+                    <element signature="e#15803#16620#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -107,7 +119,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>onWindowResize</find>
       <find>DOM</find>
       <find>onMouseWheel</find>
       <find>onMouseMove</find>
@@ -137,6 +148,7 @@
       <find>texture</find>
       <find>world</find>
       <find>earth_line</find>
+      <find>size</find>
     </findStrings>
     <replaceStrings>
       <replace>MeshLambertMaterial</replace>
@@ -265,7 +277,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="wuGlobe" />
+              <option name="myItemId" value="img" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -286,6 +298,10 @@
               <option name="myItemId" value="img" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="year" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -301,15 +317,15 @@
     <property name="FullScreen" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/js2" />
+      <recent name="$PROJECT_DIR$/src/components" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/img/year" />
       <recent name="$PROJECT_DIR$/static/img" />
       <recent name="$PROJECT_DIR$/static/wuGlobe" />
       <recent name="$PROJECT_DIR$/static/" />
-      <recent name="$PROJECT_DIR$/src/components" />
-      <recent name="$PROJECT_DIR$/static/data" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/static/js2" />
       <recent name="$PROJECT_DIR$/src/components" />
     </key>
   </component>
@@ -423,12 +439,12 @@
       <workItem from="1491491621787" duration="8104000" />
       <workItem from="1491577267247" duration="2863000" />
       <workItem from="1491629400841" duration="24000" />
-      <workItem from="1491629510756" duration="250000" />
+      <workItem from="1491629510756" duration="2112000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="83581000" />
+    <option name="totallyTimeSpent" value="85443000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -444,7 +460,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15376514" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40792078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4227723" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -475,27 +491,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/static/data/1.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/router/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="16" column="23" lean-forward="false" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build/vue-loader.conf.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/js/data.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -849,27 +844,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/static/img/1_1.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/img/year/1998.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/img/year/2016.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/static/js2/globeWU.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="278" column="31" lean-forward="false" selection-start-line="278" selection-start-column="31" selection-end-line="278" selection-end-column="31" />
+        <state relative-caret-position="168">
+          <caret line="349" column="16" lean-forward="false" selection-start-line="349" selection-start-column="16" selection-end-line="349" selection-end-column="16" />
           <folding>
-            <element signature="e#1008#2447#0" expanded="false" />
-            <element signature="e#7758#7947#0" expanded="false" />
-            <element signature="e#7995#9171#0" expanded="false" />
-            <element signature="e#9200#10533#0" expanded="false" />
-            <element signature="e#10997#11394#0" expanded="false" />
-            <element signature="e#11426#11800#0" expanded="false" />
-            <element signature="e#11830#12070#0" expanded="false" />
-            <element signature="e#12101#12304#0" expanded="false" />
-            <element signature="e#12337#12455#0" expanded="false" />
-            <element signature="e#12493#12696#0" expanded="false" />
-            <element signature="e#12733#12914#0" expanded="false" />
-            <element signature="e#12939#13107#0" expanded="false" />
-            <element signature="e#13130#13205#0" expanded="false" />
-            <element signature="e#13250#13988#0" expanded="false" />
-            <element signature="e#14071#14131#0" expanded="false" />
-            <element signature="e#14179#14996#0" expanded="false" />
+            <element signature="e#117#150#0" expanded="true" />
+            <element signature="e#1049#2488#0" expanded="false" />
+            <element signature="e#10824#12157#0" expanded="false" />
+            <element signature="e#12621#13018#0" expanded="false" />
+            <element signature="e#13050#13424#0" expanded="false" />
+            <element signature="e#13454#13694#0" expanded="false" />
+            <element signature="e#13725#13928#0" expanded="false" />
+            <element signature="e#13961#14079#0" expanded="false" />
+            <element signature="e#14117#14320#0" expanded="false" />
+            <element signature="e#14357#14538#0" expanded="false" />
+            <element signature="e#14563#14731#0" expanded="false" />
+            <element signature="e#14754#14829#0" expanded="false" />
+            <element signature="e#14874#15612#0" expanded="false" />
+            <element signature="e#15695#15755#0" expanded="false" />
+            <element signature="e#15803#16620#0" expanded="false" />
           </folding>
         </state>
       </provider>
