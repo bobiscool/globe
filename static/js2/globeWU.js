@@ -194,13 +194,13 @@ DAT.Globe = function(container, opts) {
 
 
   function addEarth() {
-    //TODO 贴图的地球
+    //TODO 真实的创建地球
     var geometry = new THREE.SphereGeometry(200, 50, 50);
 
     shader = Shaders['earth'];
     uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
-    uniforms['texture'].value = THREE.ImageUtils.loadTexture(earth);
+    uniforms['texture'].value = THREE.ImageUtils.loadTexture(world);
 
 // 贴皮肤
 
