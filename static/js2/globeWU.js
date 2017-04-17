@@ -200,7 +200,7 @@ DAT.Globe = function(container, opts) {
     shader = Shaders['earth'];
     uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
-    uniforms['texture'].value = THREE.ImageUtils.loadTexture(world);
+    uniforms['texture'].value = THREE.ImageUtils.loadTexture(earth);
 
 // 贴皮肤
 

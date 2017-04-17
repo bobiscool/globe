@@ -7,6 +7,7 @@ import Hello4 from '@/components/globe4'
 import Hello5 from '@/components/globe5'
 import Hello6 from '@/components/globe6'
 import Hello7 from '@/components/globe7'
+import Hello8 from '@/components/satellite.vue'
 
 Vue.use(Router)
 
@@ -15,7 +16,7 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      component: Hello7
+      component: Hello8
     }
   ]
 })
