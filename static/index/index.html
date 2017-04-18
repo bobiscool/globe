@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="http://7o50ww.com1.z0.glb.clouddn.com/three.js"></script>
+  <script src="http://7o50ww.com1.z0.glb.clouddn.com/DDSLoader.js"></script>
+  <script src="http://7o50ww.com1.z0.glb.clouddn.com/MTLLoader.js"></script>
+  <script src="http://7o50ww.com1.z0.glb.clouddn.com/OBJLoader.js"></script>
+  <script src="../satellite/ColladaLoader.js"></script>
+  <script src="../satellite/trackball.js"></script>
+</head>
+<style>
+  body {
+    font-family: Monospace;
+    /*background-color: #000;*/
+    color: #fff;
+    margin: 0px;
+    overflow: hidden;
+  }
+
+  html {
+    height: 100%;
+    width: 100%;
+  }
+
+  #container {
+    width: 100vh;
+    height:100vw;
+  }
+
+</style>
+<body>
+
+<div id="container"></div>
+
+<script>
+  var Shaders = {
+    'earth' : {
+      uniforms: {
+        'texture': { type: 't', value: null }
+      },
+      vertexShader: [
+        'varying vec3 vNormal;',
+        'varying vec2 vUv;',
+        'void main() {',
+        'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+        'vNormal = normalize( normalMatrix * normal );',
+        'vUv = uv;',
+        '}'
+      ].join('\n'),
+      fragmentShader: [
+        'uniform sampler2D texture;',
+        'varying vec3 vNormal;',
+        'varying vec2 vUv;',
+        'void main() {',
+        'vec3 diffuse = texture2D( texture, vUv ).xyz;',
+        'float intensity = 1.05 - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) );',
+        'vec3 atmosphere = vec3( 1.0, 1.0, 1.0 ) * pow( intensity, 3.0 );',
+        'gl_FragColor = vec4( diffuse + atmosphere, 1.0 );',
+        '}'
+      ].join('\n')
+    },
+    'atmosphere' : {
+      uniforms: {},
+      vertexShader: [
+        'varying vec3 vNormal;',
+        'void main() {',
+        'vNormal = normalize( normalMatrix * normal );',
+        'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+        '}'
+      ].join('\n'),
+      fragmentShader: [
+        'varying vec3 vNormal;',
+        'void main() {',
+        'float intensity = pow( 0.8 - dot( vNormal, vec3( 0, 0, 1.0 ) ), 12.0 );',
+        'gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;',
+        '}'
+      ].join('\n')
+    }
+  };
+
+
+  var _self = {
+    container:null,
+    camera:null,
+    scene:null,
+    renderer:null,
+    satellite:null,
+    earth:null,
+    laser:null,
+    //激光
+    controls:null,
+    timer:0,
+    vector:null,
+    sateGroup:null
+  }
+
+  var flag = {
+
+  }
+
+
+
+
+
+
+
+
+
+
+  // controler
+
+
+//  var controler = new function () {
+//    this.x = 500;
+//    this.y = 500;
+//    this.z = 500;
+//  };
+
+
+//
+//  var gui = new dat.GUI();
+//
+//  gui.add(controler,"x",-1000,1000);
+//  gui.add(controler,"y",-1000,1000);
+//  gui.add(controler,"z",-1000,1000);
+
+
+  // 创建scene
+  _self.container = document.getElementById("container");
+  //相机
+  _self.camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,10000);
+  _self.camera.position.x = 2800;
+  _self.camera.position.y = 0;
+  _self.camera.position.z = 1;
+  _self.camera.rotateY(Math.PI);
+
+  //scene
+  _self.scene = new THREE.Scene();
+
+
+  // 添加 控件调节
+  _self.controls = new THREE.TrackballControls(_self.camera);
+  _self.controls.rotateSpeed = 1.0;
+  _self.controls.zoomSpeed = 1.0;
+  _self.controls.panSpeed = 1.0;
+  var Clock = new  THREE.Clock();
+
+  var axis = new THREE.AxisHelper(1000);
+
+  _self.scene.add(axis);
+
+
+  // 创建环境光
+  var surLight = new THREE.AmbientLight(0xffffff);
+  _self.scene.add(surLight);
+
+  // 创建renderer
+  _self.renderer=new THREE.WebGLRenderer();
+  _self.renderer.setPixelRatio(window.devicePixelRatio);
+  console.log(_self.renderer);
+
+  _self.renderer.setSize(window.innerWidth,window.innerHeight);
+  _self.container.appendChild(_self.renderer.domElement);
+
+
+  // 创建定位点
+
+  _self.vector = new THREE.Vector3(2000,0,0) ;
+
+
+
+
+
+
+  window.addEventListener("resize",resizeWindow);
+
+
+
+
+
+
+  // 创建卫星
+  //          var loader = new THREE.OBJLoader();
+  //          loader.load('../../static/model/satellite.obj',function (geometry) {
+  //            var material = new THREE.MeshLambertMaterial({
+  //              color:0xffffff
+  //            })
+  //
+  ////            geometry.forEach(function (child) {
+  ////              if(child.children.length===1){
+  ////                  if(child.children[0] instanceof THREE.Mesh){
+  ////                    child.children[0].material = material;
+  ////                  }
+  ////              }
+  ////            });
+  //
+  //            geometry.scale.set(0.01,0.01,0.01);
+  //
+  //            geometry.rotation.x =0.3;
+  //
+  //            geometry.position.set(300,0,0);
+  //            _self.scene.add(geometry);
+  //
+  //          });
+
+
+  //loder2
+
+  _self.sateGroup = new THREE.Group();
+  var mesh;
+
+  var loder2 = new THREE.ColladaLoader();
+  loder2.load("../../static/model/satellite.dae",function (result) {
+    _self.satellite= result.scene.children[0].children[0].clone();
+    _self.satellite.scale.set(0.001,0.001,0.001);
+
+
+    _self.satellite.position.set(2800,0,0);
+//            _self.satellite.rotation.set(100,100,100);
+
+    _self.sateGroup.add(_self.satellite);
+  });
+
+
+
+
+  // 创建 激光
+
+
+  var laser = new THREE.CylinderGeometry(2,100,200,100,100,true);
+  laser.rotateX(-Math.PI/2);
+  var material = new THREE.MeshPhongMaterial({color: 0xffffff,transparent:true,opacity:0.3});
+  _self.laser = new THREE.Mesh(laser, material);
+  _self.laser.position.set(2100,0,0);
+
+  _self.sateGroup.add(_self.laser);
+
+  _self.scene.add(_self.sateGroup);
+
+  // 卫星加载太慢 用 box代替一下
+  //          var box = new THREE.BoxGeometry(100,100,10,10,10,10);
+  //
+  //          var boxMat = new THREE.MeshLambertMaterial({
+  //            color:0XFFFFFF
+  //          });
+  //
+  //          _self.satellite = new THREE.Mesh(box,boxMat);
+  //          _self.satellite.position.set(1000,1200,0);
+  //
+  //          _self.scene.add(_self.satellite);
+
+
+
+
+
+  // 创建地球
+
+  var geometry = new THREE.SphereGeometry(1000,100,100);
+
+  var shader = Shaders['earth'];
+  var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+
+  uniforms['texture'].value = THREE.ImageUtils.loadTexture("../img/world.jpg");
+
+
+  var EarthMaterial = new THREE.ShaderMaterial({
+
+    uniforms: uniforms,
+    vertexShader: shader.vertexShader,
+    fragmentShader: shader.fragmentShader
+
+  });
+
+
+  _self.earth = new THREE.Mesh(geometry, EarthMaterial);
+  _self.earth.rotation.y = Math.PI;
+  _self.earth.position.set(1000,0,0);
+  _self.scene.add( _self.earth);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  animate();
+
+  // 动画区
+
+
+
+  function animate() {
+    var delta = Clock.getDelta();
+    _self.controls.update(delta);
+
+
+
+    requestAnimationFrame(animate);
+    render();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //主要动画区域
+  function render(){
+
+
+
+
+
+
+
+
+
+    //首先是卫星飞出来
+
+    //TODO 动画区
+
+
+
+
+
+
+
+
+
+
+
+
+    if(_self.satellite){
+//                _self.satellite.position.set(1200*Math.cos(_self.timer*0.01)+1000,1200*Math.sin(_self.timer*0.01),0);
+//
+
+      if(!flag.flag1){
+        if(_self.satellite.position.x>2200) {
+          _self.satellite.position.x -= 1;
+          _self.satellite.rotation.z += 0.01;
+          _self.camera.lookAt(_self.satellite.position);
+        }else {
+            flag.flag1=true;
+        }
+      }
+
+
+
+
+      if(!flag.flag2){
+        if(2200<_self.satellite.position.x<=2800){
+          _self.camera.position.x-=1;
+          _self.camera.position.z+=1;
+        }else {
+            flag.flag2=true;
+        }
+      }
+
+
+
+
+
+      if(flag.flag1){
+//          _self.camera.lookAt(_self.vector);
+        _self.camera.position.z+=1;
+          _self.camera.lookAt(_self.satellite.position);
+          _self.satellite.position.set(1200*Math.cos(_self.timer*0.01)+1000,1200*Math.sin(_self.timer*0.01),0);
+        _self.laser.position.set(1100*Math.cos(_self.timer*0.01)+1000,1100*Math.sin(_self.timer*0.01),0);
+        _self.timer++;
+
+      }
+
+
+
+
+
+
+//            _self.camera.lookAt( _self.vector);
+
+    }
+
+//            _self.camera.position.set(controler.x,controler.y,controler.z);
+
+    _self.laser.lookAt(_self.earth.position);
+
+
+    _self.renderer.render(_self.scene,_self.camera);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  // 事件  resize
+
+  function resizeWindow() {
+    _self.camera.aspect = window.innerWidth/window.innerHeight;
+
+//    _self.camera.position.set(controler.x,controler.y,controler.z);
+    _self.camera.updateProjectionMatrix();
+
+    _self.renderer.setSize(window.innerWidth,window.innerHeight);
+
+  }
+
+
+
+
+
+
+
+
+
+function destoryFuc(a) {
+  a&&a();
+  a=null;
+}
+</script>
+</body>
+</html>

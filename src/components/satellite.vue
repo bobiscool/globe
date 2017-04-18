@@ -71,7 +71,7 @@
           _self.container = document.getElementById("container");
           //相机
           _self.camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,10000);
-          _self.camera.position.x = 1000;
+          _self.camera.position.x = 2000;
           _self.camera.position.y = 1200;
           _self.camera.position.z = 100;
           _self.camera.rotateY(Math.PI);
@@ -157,7 +157,7 @@
             _self.satellite.scale.set(0.001,0.001,0.001);
 
 
-            _self.satellite.position.set(1000,1200,0);
+            _self.satellite.position.set(2500,1200,0);
 //            _self.satellite.rotation.set(100,100,100);
 
             _self.sateGroup.add(_self.satellite);
@@ -252,14 +252,69 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           //主要动画区域
           function render(){
             _self.timer++;
 
+
+
+
+
+
+
+
+            //首先是卫星飞出来
+
+
+
+
+
+
+
+
+
+
               if(_self.satellite){
-                _self.satellite.position.set(1200*Math.cos(_self.timer*0.01)+1000,1200*Math.sin(_self.timer*0.01),0);
+//                _self.satellite.position.set(1200*Math.cos(_self.timer*0.01)+1000,1200*Math.sin(_self.timer*0.01),0);
+//
+
+                if(_self.satellite.position.x>1000){
+                  _self.satellite.position.x-=1;
+                }else {
+                  _self.satellite.position.set(1200*Math.cos(_self.timer*0.01)+1000,1200*Math.sin(_self.timer*0.01),0);
+                }
+
+
+
+
+
+
                 _self.satellite.lookAt(_self.earth.position);
                 _self.camera.lookAt( _self.satellite.position);
+//            _self.camera.lookAt( _self.vector);
 
               }
 

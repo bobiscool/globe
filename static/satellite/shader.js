@@ -46,4 +46,3 @@ var Shaders = {
   }
 };
 
-export default Shaders;
