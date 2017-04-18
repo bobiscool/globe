@@ -27,7 +27,10 @@
               laser:null,
               //激光
               controls:null,
-              timer:0
+              timer:0,
+              vector:null,
+              sateGroup:null
+
             }
         },
         components: {
@@ -70,7 +73,8 @@
           _self.camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,10000);
           _self.camera.position.x = 1000;
           _self.camera.position.y = 1200;
-          _self.camera.position.z = 500;
+          _self.camera.position.z = 100;
+          _self.camera.rotateY(Math.PI);
 
           //scene
           _self.scene = new THREE.Scene();
@@ -99,6 +103,15 @@
 
           _self.renderer.setSize(window.innerWidth,window.innerHeight);
           _self.container.appendChild(_self.renderer.domElement);
+
+
+          // 创建定位点
+
+          _self.vector = new THREE.Vector3(1000,1200,-1000) ;
+
+
+
+
 
 
           window.addEventListener("resize",resizeWindow);
@@ -135,29 +148,46 @@
 
           //loder2
 
+          _self.sateGroup = new THREE.Group();
           var mesh;
 
           var loder2 = new THREE.ColladaLoader();
           loder2.load("../../static/model/satellite.dae",function (result) {
             _self.satellite= result.scene.children[0].children[0].clone();
-            _self.satellite.scale.set(0.01,0.01,0.01);
+            _self.satellite.scale.set(0.001,0.001,0.001);
 
-            _self.satellite.position.set(1200,1000,0);
-            _self.satellite.rotation.set(100,100,100)
 
-            _self.scene.add(_self.satellite);
+            _self.satellite.position.set(1000,1200,0);
+//            _self.satellite.rotation.set(100,100,100);
+
+            _self.sateGroup.add(_self.satellite);
           });
 
 
+
+
+          // 创建 激光
+
+
+          var laser = new THREE.CylinderGeometry(2,100,200,100,100,true);
+          laser.rotateX(-Math.PI/2);
+          var material = new THREE.MeshPhongMaterial({color: 0xffffff,transparent:true,opacity:0.3});
+          _self.laser = new THREE.Mesh(laser, material);
+          _self.laser.position.set(1000,1100,0);
+
+          _self.sateGroup.add(_self.laser );
+
+          _self.scene.add(_self.sateGroup);
+
           // 卫星加载太慢 用 box代替一下
-//          var box = new THREE.BoxGeometry(100,100,100,10,10,10);
+//          var box = new THREE.BoxGeometry(100,100,10,10,10,10);
 //
 //          var boxMat = new THREE.MeshLambertMaterial({
 //            color:0XFFFFFF
 //          });
 //
 //          _self.satellite = new THREE.Mesh(box,boxMat);
-//          _self.satellite.position.set(1200,1000,0);
+//          _self.satellite.position.set(1000,1200,0);
 //
 //          _self.scene.add(_self.satellite);
 
@@ -186,8 +216,9 @@
 
           _self.earth = new THREE.Mesh(geometry, EarthMaterial);
           _self.earth.rotation.y = Math.PI;
-          _self.earth.position.set(0,1000,0);
+          _self.earth.position.set(1000,0,0);
           _self.scene.add( _self.earth);
+
 
 
 
@@ -226,13 +257,17 @@
             _self.timer++;
 
               if(_self.satellite){
-                _self.satellite.position.set(1200*Math.cos(_self.timer*0.01),1200*Math.sin(_self.timer*0.01)+1000,0);
+                _self.satellite.position.set(1200*Math.cos(_self.timer*0.01)+1000,1200*Math.sin(_self.timer*0.01),0);
                 _self.satellite.lookAt(_self.earth.position);
-                _self.camera.lookAt(_self.satellite.position);
+                _self.camera.lookAt( _self.satellite.position);
 
               }
 
 //            _self.camera.position.set(controler.x,controler.y,controler.z);
+
+            _self.laser.lookAt(_self.earth.position);
+
+            _self.laser.position.set(1100*Math.cos(_self.timer*0.01)+1000,1100*Math.sin(_self.timer*0.01),0);
 
             _self.renderer.render(_self.scene,_self.camera);
           }
