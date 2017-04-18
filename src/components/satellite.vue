@@ -7,7 +7,11 @@
   import Shaders from "sta/satellite/shader.js"
 //  import obj from "../../static/model/satellite2.obj"
 
+
   import world from "img/world.jpg";
+  import dat from "dat-gui"
+
+
 
     export default{
 
@@ -22,7 +26,8 @@
               earth:null,
               laser:null,
               //激光
-              controls:null
+              controls:null,
+              timer:0
             }
         },
         components: {
@@ -40,12 +45,31 @@
 
           //TODO 函数执行区域
 
+
+          // controler
+
+
+          var controler = new function () {
+            this.x = 500;
+            this.y = 500;
+            this.z = 500;
+          };
+
+
+
+          var gui = new dat.GUI();
+
+          gui.add(controler,"x",-1000,1000);
+          gui.add(controler,"y",-1000,1000);
+          gui.add(controler,"z",-1000,1000);
+
+
           // 创建scene
           _self.container = document.getElementById("container");
           //相机
-          _self.camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,2000);
-          _self.camera.position.x = 500;
-          _self.camera.position.y = 500;
+          _self.camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,10000);
+          _self.camera.position.x = 1000;
+          _self.camera.position.y = 1200;
           _self.camera.position.z = 500;
 
           //scene
@@ -118,11 +142,25 @@
             _self.satellite= result.scene.children[0].children[0].clone();
             _self.satellite.scale.set(0.01,0.01,0.01);
 
-            _self.satellite.position.set(300,300,300);
+            _self.satellite.position.set(1200,1000,0);
             _self.satellite.rotation.set(100,100,100)
 
             _self.scene.add(_self.satellite);
           });
+
+
+          // 卫星加载太慢 用 box代替一下
+//          var box = new THREE.BoxGeometry(100,100,100,10,10,10);
+//
+//          var boxMat = new THREE.MeshLambertMaterial({
+//            color:0XFFFFFF
+//          });
+//
+//          _self.satellite = new THREE.Mesh(box,boxMat);
+//          _self.satellite.position.set(1200,1000,0);
+//
+//          _self.scene.add(_self.satellite);
+
 
 
 
@@ -148,7 +186,7 @@
 
           _self.earth = new THREE.Mesh(geometry, EarthMaterial);
           _self.earth.rotation.y = Math.PI;
-          _self.earth.position.set(0,-1500,0);
+          _self.earth.position.set(0,1000,0);
           _self.scene.add( _self.earth);
 
 
@@ -172,8 +210,8 @@
 
 
           function animate() {
-//            var delta = Clock.getDelta();
-//            _self.controls.update(delta);
+            var delta = Clock.getDelta();
+            _self.controls.update(delta);
 
 
 
@@ -182,16 +220,20 @@
           }
 
 
+
           //主要动画区域
           function render(){
-
+            _self.timer++;
 
               if(_self.satellite){
-//                _self.satellite.rotation.x +=0.01;
-//                _self.satellite.rotation.y +=0.01;
-                _self.satellite.rotation.z +=0.01;
+                _self.satellite.position.set(1200*Math.cos(_self.timer*0.01),1200*Math.sin(_self.timer*0.01)+1000,0);
+                _self.satellite.lookAt(_self.earth.position);
+                _self.camera.lookAt(_self.satellite.position);
+
               }
-               _self.camera.lookAt(_self.scene.position);
+
+//            _self.camera.position.set(controler.x,controler.y,controler.z);
+
             _self.renderer.render(_self.scene,_self.camera);
           }
 
@@ -210,6 +252,8 @@
 
            function resizeWindow() {
              _self.camera.aspect = window.innerWidth/window.innerHeight;
+
+             _self.camera.position.set(controler.x,controler.y,controler.z);
              _self.camera.updateProjectionMatrix();
 
              _self.renderer.setSize(window.innerWidth,window.innerHeight);
