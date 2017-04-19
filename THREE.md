@@ -17,3 +17,5 @@
 7. object 的pivot 怎么来改变 [link](https://github.com/mrdoob/three.js/issues/1364)
 [link2](http://jafty.com/blog/tag/change-pivot-point-of-three-js-object/)
 
+8.
+
