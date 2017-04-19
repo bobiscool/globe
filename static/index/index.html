@@ -7,6 +7,7 @@
   <script src="http://7o50ww.com1.z0.glb.clouddn.com/DDSLoader.js"></script>
   <script src="http://7o50ww.com1.z0.glb.clouddn.com/MTLLoader.js"></script>
   <script src="http://7o50ww.com1.z0.glb.clouddn.com/OBJLoader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.6.0/Tween.min.js"></script>
   <script src="../satellite/ColladaLoader.js"></script>
   <script src="../satellite/trackball.js"></script>
 </head>
@@ -35,6 +36,7 @@
 <div id="container"></div>
 
 <script>
+  console.log(TWEEN);
   var Shaders = {
     'earth' : {
       uniforms: {
@@ -77,7 +79,8 @@
         'gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;',
         '}'
       ].join('\n')
-    }
+    },
+
   };
 
 
@@ -98,6 +101,22 @@
 
   var flag = {
 
+  }
+
+
+  var Timer = {
+      timer1:0,
+    timer2:0,
+    timer3:0
+  }
+
+  var Tween={
+      satTween:null,
+      lasTween1:null,
+      lasTween2:null,
+      lasTween3:null,
+      lasTween4:null,
+    camTween1:null
   }
 
 
@@ -220,6 +239,55 @@
     _self.satellite.position.set(2800,0,0);
 //            _self.satellite.rotation.set(100,100,100);
 
+    console.log( _self.satellite.position.x);
+
+    //TODO 卫星动画
+    Tween.satTween =new TWEEN.Tween(_self.satellite.position).to({
+      x:2200,
+      y:0,
+      z:0
+    },8000);
+
+    //TODO 相机动画
+    Tween.camTween1 = new TWEEN.Tween(_self.camera.position).to({
+      x:2200,
+      y:0,
+      z:1000
+    },8000);
+
+
+    Tween.satTween.start();
+    Tween.camTween1.start();
+    console.log(_self.laser);
+    Tween.lasTween1 = new TWEEN.Tween(_self.laser.scale).to({
+            x:0.02,
+            y:0.02,
+            z:1
+    },2000).easing(TWEEN.Easing.Quintic.In);
+
+    Tween.lasTween2 = new TWEEN.Tween(_self.laser.scale).to({
+      x:1,
+      y:1,
+      z:1
+    },2000);
+
+    Tween.lasTween3 = new TWEEN.Tween(_self.laser.material).to({
+      opacity:0.5
+    },2000).easing(TWEEN.Easing.Quintic.In);
+
+    Tween.lasTween4 = new TWEEN.Tween(_self.laser.position).to({
+      x:2100,
+      y:0,
+      z:0
+    },2000).easing(TWEEN.Easing.Quintic.In).onUpdate(function () {
+      console.log("动画4");
+    });
+
+
+      Tween.satTween.chain(Tween.lasTween1,Tween.lasTween3,Tween.lasTween4);
+    Tween.lasTween3.chain(Tween.lasTween2);
+
+
     _self.sateGroup.add(_self.satellite);
   });
 
@@ -229,11 +297,21 @@
   // 创建 激光
 
 
-  var laser = new THREE.CylinderGeometry(2,100,200,100,100,true);
+  var laser = new THREE.CylinderGeometry(2,50,200,100,100,true);
+//  var laser = new THREE.CylinderGeometry(2,1,0,100,100,true);
   laser.rotateX(-Math.PI/2);
-  var material = new THREE.MeshPhongMaterial({color: 0xffffff,transparent:true,opacity:0.3});
+  var material = new THREE.MeshPhongMaterial({color: 0xffffff,transparent:true,opacity:1});
   _self.laser = new THREE.Mesh(laser, material);
-  _self.laser.position.set(2100,0,0);
+  _self.laser.position.set(2200,0,0);
+  _self.laser.scale.set(0.02,0.02,0.0001);
+
+  //  _self.laser.scale.set(1,0,0);
+
+
+
+
+  console.log(Tween.satTween);
+//  Tween.satTween.chain(Tween.lasTween);
 
   _self.sateGroup.add(_self.laser);
 
@@ -255,26 +333,34 @@
 
 
 
-  // 创建地球
+  // todo 创建地球
 
   var geometry = new THREE.SphereGeometry(1000,100,100);
 
-  var shader = Shaders['earth'];
-  var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+//  var shader = Shaders['earth'];
+//  var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
-  uniforms['texture'].value = THREE.ImageUtils.loadTexture("../img/world.jpg");
+//  uniforms['texture'].value = THREE.ImageUtils.loadTexture("../img/earth.jpg");
+//
+//
+//
+//  var EarthMaterial = new THREE.ShaderMaterial({
+//
+//    uniforms: uniforms,
+//    vertexShader: shader.vertexShader,
+//    fragmentShader: shader.fragmentShader
+//
+//  });
+
+  // TODO 不用着色器
+
+  var mat = new THREE.MeshLambertMaterial({map:new THREE.TextureLoader().load("../img/earth.jpg")});
 
 
-  var EarthMaterial = new THREE.ShaderMaterial({
-
-    uniforms: uniforms,
-    vertexShader: shader.vertexShader,
-    fragmentShader: shader.fragmentShader
-
-  });
 
 
-  _self.earth = new THREE.Mesh(geometry, EarthMaterial);
+
+  _self.earth = new THREE.Mesh(geometry, mat);
   _self.earth.rotation.y = Math.PI;
   _self.earth.position.set(1000,0,0);
   _self.scene.add( _self.earth);
@@ -303,9 +389,7 @@
   function animate() {
     var delta = Clock.getDelta();
     _self.controls.update(delta);
-
-
-
+    TWEEN.update();
     requestAnimationFrame(animate);
     render();
   }
@@ -338,7 +422,7 @@
   //主要动画区域
   function render(){
 
-
+    Timer.timer1++;
 
 
 
@@ -367,7 +451,6 @@
 
       if(!flag.flag1){
         if(_self.satellite.position.x>2200) {
-          _self.satellite.position.x -= 1;
           _self.satellite.rotation.z += 0.01;
           _self.camera.lookAt(_self.satellite.position);
         }else {
@@ -380,23 +463,61 @@
 
       if(!flag.flag2){
         if(2200<_self.satellite.position.x<=2800){
-          _self.camera.position.x-=1;
-          _self.camera.position.z+=1;
+//          _self.camera.position.x-=1;
+//          _self.camera.position.z+=1;
         }else {
             flag.flag2=true;
         }
       }
 
 
+//      if(!flag.flag3){
+//          // TODO 停顿
+//        if(_self.satellite.position.x===2200){
+//
+//          Timer.timer2 ++;
+//          if(Timer.timer2<=100){
+//             console.log("timer2");
+//             //TODO 打灯
+//
+//            //TODO 光柱出来
+//
+////            console.log(_self.laser);
+//
+////            _self.laser.material.opacity+=0.001;
+////            _self.laser.scale.x+=0.001;
+////            _self.laser.scale.y+=0.001;
+////            _self.laser.scale.z+=0.001;
+//
+//
+//            _self.satellite.position.x=2200;
+//          }else{
+//              flag.flag3=true;
+//          }
+//
+////          _self.camera.position.z+=1;
+//
+//          _self.camera.lookAt(_self.satellite.position);
+//
+//        }
+//      }
 
 
 
-      if(flag.flag1){
-//          _self.camera.lookAt(_self.vector);
-        _self.camera.position.z+=1;
+
+      flag.flag3 = true;
+      if(flag.flag1&&flag.flag3){
+        // TODO 绕着转圈
+        Timer.timer3++;
+//          _self.camera.lookAt(_self.earth.position);
+
+//        _self.camera.position.z+=1;
+//        _self.camera.position.x+=1;
           _self.camera.lookAt(_self.satellite.position);
-          _self.satellite.position.set(1200*Math.cos(_self.timer*0.01)+1000,1200*Math.sin(_self.timer*0.01),0);
-        _self.laser.position.set(1100*Math.cos(_self.timer*0.01)+1000,1100*Math.sin(_self.timer*0.01),0);
+
+          // to 慢速开始
+          _self.satellite.position.set(1200*Math.cos(_self.timer/100000)+1000,1200*Math.sin(_self.timer/100000),0);
+        _self.laser.position.set(1100*Math.cos(_self.timer/100000)+1000,1100*Math.sin(_self.timer/100000),0);
         _self.timer++;
 
       }
