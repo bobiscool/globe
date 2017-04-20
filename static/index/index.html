@@ -244,39 +244,51 @@
 
     //TODO 拉长光柱
     Tween.lasTween1 = new TWEEN.Tween(_self.laser.scale).to({
-            x:0.01,
-            y:0.01,
+            x:1,
+            y:1,
             z:1
-    },2000);
+    },2000).easing(TWEEN.Easing.
+      Quintic.Out).onUpdate(function () {
+      console.log("开始z");
+
+    });
 
     //TODO 拉大光柱
     Tween.lasTween2 = new TWEEN.Tween(_self.laser.scale).to({
       x:1,
       y:1,
       z:1
-    },2000);
+    },2000).easing(TWEEN.Easing.
+      Quintic.Out).onUpdate(function () {
+      console.log("开始xy");
+
+    });
 
     //TODO 增加光柱透明度
     Tween.lasTween3 = new TWEEN.Tween(_self.laser.material).to({
       opacity:0.5
-    },2000).easing(TWEEN.Easing.Quintic.In);
+    },2000).easing(TWEEN.Easing.
+      Quintic.Out).onUpdate(function () {
+      console.log("透明度");
 
-    //光柱向前移动
-    Tween.lasTween4 = new TWEEN.Tween(_self.laser.position).to({
-      x:2100,
-      y:0,
-      z:0
-    },4000).onUpdate(function () {
-      console.log("动画4");
     });
 
+    //光柱向前移动
+//    Tween.lasTween4 = new TWEEN.Tween(_self.laser.position).to({
+//      x:2100,
+//      y:0,
+//      z:0
+//    },2000).easing(TWEEN.Easing.
+//      Linear.None).onUpdate(function () {
+//          console.log("x方向移动")
+//    });
 
-      Tween.satTween.chain(Tween.lasTween1,Tween.lasTween3,Tween.lasTween4);
+
+      Tween.satTween.chain(Tween.lasTween1,Tween.lasTween3);
     Tween.lasTween3.chain(Tween.lasTween2);
 
 
   });
-
 
 
 
@@ -288,17 +300,21 @@
   var laser = new THREE.CylinderGeometry(2,50,200,100,100,true);
 //  var laser = new THREE.CylinderGeometry(2,1,0,100,100,true);
   laser.rotateX(-Math.PI/2);
-  var material = new THREE.MeshPhongMaterial({color: 0xffffff,transparent:true,opacity:1});
+
+  laser.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, 100 ) );
+
+  var material = new THREE.MeshPhongMaterial({color: 0xffffff,transparent:true,opacity:0});
   _self.laser = new THREE.Mesh(laser, material);
   _self.laser.position.set(2200,0,0);
+
 //  _self.laser.translateOnAxis(pivot,100);
-  _self.laser.scale.set(0.001,0.001,0.001);
+  _self.laser.scale.set(0.01,0.01,0.01);
 
-//  _self.scene.add(_self.laser);
+  _self.scene.add(_self.laser);
 
-  pivot.add(_self.laser);
+//  pivot.add(_self.laser);
 
-  _self.scene.add(pivot);
+//  _self.scene.add(pivot);
 
   //  _self.laser.scale.set(1,0,0);
 
@@ -457,26 +473,26 @@
 //
 //
 ////      flag.flag3 = true;
-//      if(flag.flag1&&flag.flag3){
-//        // TODO 绕着转圈
-//        _self.timer++;
-//        Timer.timer3++;
-//        console.log("开始转圈");
-//          _self.camera.lookAt(_self.satellite.position);
-//
-//          // to 慢速开始
-//          _self.satellite.position.set(1200*Math.cos(_self.timer/1000)+1000,1200*Math.sin(_self.timer/1000),0);
-//        _self.laser.position.set(1100*Math.cos(_self.timer/1000)+1000,1100*Math.sin(_self.timer/1000),0);
-//
-//      }
-//
-//
-//
-//
-//
-//
-////            _self.camera.lookAt( _self.vector);
-//
+      if(flag.flag1){
+        // TODO 绕着转圈
+        _self.timer++;
+        Timer.timer3++;
+        console.log("开始转圈");
+          _self.camera.lookAt(_self.satellite.position);
+
+          // to 慢速开始
+          _self.satellite.position.set(1200*Math.cos(_self.timer/1000)+1000,1200*Math.sin(_self.timer/1000),0);
+        _self.laser.position.set(1200*Math.cos(_self.timer/1000)+1000,1200*Math.sin(_self.timer/1000),0);
+
+      }
+
+
+
+
+
+
+//            _self.camera.lookAt( _self.vector);
+
 //    }
 
 //            _self.camera.position.set(controler.x,controler.y,controler.z);
