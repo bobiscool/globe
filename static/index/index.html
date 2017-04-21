@@ -36,6 +36,8 @@
 <div id="container"></div>
 
 <script>
+
+  <!--->
   console.log(TWEEN);
   var Shaders = {
     'earth' : {
@@ -116,7 +118,17 @@
       lasTween2:null,
       lasTween3:null,
       lasTween4:null,
-    camTween1:null
+    camTween1:null,
+    camTween2:null,
+    earth1:null,
+    camLookat:null
+  }
+
+  var Camchange = {
+  }
+
+  var Camchangedx = {
+      t1:0
   }
 
 
@@ -131,7 +143,7 @@
   _self.container = document.getElementById("container");
   //相机
   _self.camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,10000);
-  _self.camera.position.x = 2800;
+  _self.camera.position.x = 1800;
   _self.camera.position.y = 0;
   _self.camera.position.z = 1;
   _self.camera.rotateY(Math.PI);
@@ -147,7 +159,7 @@
   _self.controls.panSpeed = 1.0;
   var Clock = new  THREE.Clock();
 
-  var axis = new THREE.AxisHelper(1000);
+  var axis = new THREE.AxisHelper(5000);
 
   _self.scene.add(axis);
 
@@ -168,7 +180,7 @@
   // 创建定位点
 
   //todo 一些定位点
-  _self.vector = new THREE.Vector3(2000,0,0) ;
+  _self.vector = new THREE.Vector3(0,0,0) ;
 //  var pivot = new THREE.Object3D)
 
 //  console.log("aser.position",pivotCy);
@@ -217,7 +229,7 @@
     _self.satellite.scale.set(0.001,0.001,0.001);
 
 
-    _self.satellite.position.set(2800,0,0);
+    _self.satellite.position.set(1800,0,0);
 //            _self.satellite.rotation.set(100,100,100);
 
       _self.scene.add(_self.satellite);
@@ -225,22 +237,50 @@
 
     //TODO 卫星动画
     Tween.satTween =new TWEEN.Tween(_self.satellite.position).to({
-      x:2200,
+      x:1200,
       y:0,
       z:0
-    },8000);
+    },8000).onUpdate(function () {
+//      _self.camera.lookAt(_self.satellite.position);
+    });
 
     //TODO 相机动画
     Tween.camTween1 = new TWEEN.Tween(_self.camera.position).to({
-      x:2200,
+      x:1200,
       y:200,
       z:500
-    },8000);
+    },8000).onComplete(function () {
+      _self.camera.lookAt(_self.satellite.position);
+      Camchange.q1 = new THREE.Quaternion().copy(_self.camera.quaternion);
+
+      _self.camera.lookAt(_self.vector);
+      Camchange.q2 = new THREE.Quaternion().copy(_self.camera.quaternion);
+
+      console.log("完事！！")
+    });
+
+    Tween.camLookat=new TWEEN.Tween(Camchangedx).to({t1:1},4000);
+
+
+
+
+
+
+    Tween.camTween2 = new TWEEN.Tween(_self.camera.position).to({
+      x:0,
+      y:200,
+      z:3000
+    },10000)
+
+
+
+
+
 
 
     Tween.satTween.start();
     Tween.camTween1.start();
-    console.log(_self.laser);
+//    console.log(_self.laser);
 
     //TODO 拉长光柱
     Tween.lasTween1 = new TWEEN.Tween(_self.laser.scale).to({
@@ -249,7 +289,7 @@
             z:1
     },2000).easing(TWEEN.Easing.
       Quintic.Out).onUpdate(function () {
-      console.log("开始z");
+//      console.log("开始z");
 
     });
 
@@ -260,7 +300,7 @@
       z:1
     },2000).easing(TWEEN.Easing.
       Quintic.Out).onUpdate(function () {
-      console.log("开始xy");
+//      console.log("开始xy");
 
     });
 
@@ -269,8 +309,7 @@
       opacity:0.5
     },2000).easing(TWEEN.Easing.
       Quintic.Out).onUpdate(function () {
-      console.log("透明度");
-
+//      console.log("透明度");
     });
 
     //光柱向前移动
@@ -286,6 +325,8 @@
 
       Tween.satTween.chain(Tween.lasTween1,Tween.lasTween3);
     Tween.lasTween3.chain(Tween.lasTween2);
+    Tween.camTween1.chain(Tween.camTween2);
+    Tween.camTween2.chain(Tween.camLookat);
 
 
   });
@@ -305,41 +346,12 @@
 
   var material = new THREE.MeshPhongMaterial({color: 0xffffff,transparent:true,opacity:0});
   _self.laser = new THREE.Mesh(laser, material);
-  _self.laser.position.set(2200,0,0);
+  _self.laser.position.set(1200,0,0);
 
-//  _self.laser.translateOnAxis(pivot,100);
+
   _self.laser.scale.set(0.01,0.01,0.01);
 
   _self.scene.add(_self.laser);
-
-//  pivot.add(_self.laser);
-
-//  _self.scene.add(pivot);
-
-  //  _self.laser.scale.set(1,0,0);
-
-
-
-
-  console.log(Tween.satTween);
-//  Tween.satTween.chain(Tween.lasTween);
-
-
-//  _self.scene.add(_self.sateGroup);
-
-  // 卫星加载太慢 用 box代替一下
-  //          var box = new THREE.BoxGeometry(100,100,10,10,10,10);
-  //
-  //          var boxMat = new THREE.MeshLambertMaterial({
-  //            color:0XFFFFFF
-  //          });
-  //
-  //          _self.satellite = new THREE.Mesh(box,boxMat);
-  //          _self.satellite.position.set(1000,1200,0);
-  //
-  //          _self.scene.add(_self.satellite);
-
-
 
 
 
@@ -372,22 +384,8 @@
 
   _self.earth = new THREE.Mesh(geometry, mat);
   _self.earth.rotation.y = Math.PI;
-  _self.earth.position.set(1000,0,0);
+  _self.earth.position.set(0,0,0);
   _self.scene.add( _self.earth);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   animate();
@@ -397,26 +395,32 @@
 
 
   function animate() {
-    var delta = Clock.getDelta();
-    _self.controls.update(delta);
+//    var delta = Clock.getDelta();
+//    _self.controls.update(delta);
     TWEEN.update();
+
+
+
+    //TODO 地球旋转
+
+    _self.earth.rotation.y +=0.001;
+
+    if(Camchangedx.t1){
+      THREE.Quaternion.slerp(Camchange.q1,Camchange.q2,_self.camera.quaternion,Camchangedx.t1);
+    }
+
+
     requestAnimationFrame(animate);
     render();
   }
 
+  //TODO 主要动画区域
 
 
 
-
-  //主要动画区域
   function render(){
 
     Timer.timer1++;
-
-
-
-
-
 
 
     //首先是卫星飞出来
@@ -425,7 +429,7 @@
 
     if(_self.satellite) {
       if (!flag.flag1) {
-        if (_self.satellite.position.x > 2200) {
+        if (_self.satellite.position.x > 1200) {
           _self.satellite.rotation.z += 0.01;
           _self.camera.lookAt(_self.satellite.position);
         } else {
@@ -433,56 +437,15 @@
         }
       }
     }
-//
-//
-//
-//
-//      if(!flag.flag2){
-//        if(2200<_self.satellite.position.x<=2800){
-////          _self.camera.position.x-=1;
-////          _self.camera.position.z+=1;
-//        }else {
-//            flag.flag2=true;
-//        }
-//      }
-//
-//
-//      if(!flag.flag3){
-//          // TODO 停顿
-//        if(_self.satellite.position.x===2200){
-//
-//          Timer.timer2 ++;
-//          if(Timer.timer2<=500){
-//             console.log("timer2");
-//             //TODO 打灯
-//
-//            //TODO 光柱出来
-//            _self.satellite.position.x=2200;
-//          }else{
-//              flag.flag3=true;
-//          }
-//
-////          _self.camera.position.z+=1;
-//
-//          _self.camera.lookAt(_self.satellite.position);
-//
-//        }
-//      }
-//
-//
-//
-//
-////      flag.flag3 = true;
+
+
+
       if(flag.flag1){
         // TODO 绕着转圈
         _self.timer++;
         Timer.timer3++;
-        console.log("开始转圈");
-          _self.camera.lookAt(_self.satellite.position);
-
-          // to 慢速开始
-          _self.satellite.position.set(1200*Math.cos(_self.timer/1000)+1000,1200*Math.sin(_self.timer/1000),0);
-        _self.laser.position.set(1200*Math.cos(_self.timer/1000)+1000,1200*Math.sin(_self.timer/1000),0);
+          _self.satellite.position.set(1200*Math.cos(_self.timer/1000),1200*Math.sin(_self.timer/1000),0);
+        _self.laser.position.set(1200*Math.cos(_self.timer/1000),1200*Math.sin(_self.timer/1000),0);
 
       }
 
@@ -491,14 +454,8 @@
 
 
 
-//            _self.camera.lookAt( _self.vector);
-
-//    }
-
-//            _self.camera.position.set(controler.x,controler.y,controler.z);
 
     _self.laser.lookAt(_self.earth.position);
-          _self.camera.lookAt(_self.satellite.position);
 
     _self.renderer.render(_self.scene,_self.camera);
   }

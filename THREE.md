@@ -15,7 +15,7 @@
 6. 一个模型的xyz怎么来确。。。就没有一个helper吗？
 
 7. object 的pivot 怎么来改变 [link](https://github.com/mrdoob/three.js/issues/1364)
-[link2](http://jafty.com/blog/tag/change-pivot-point-of-three-js-object/)
+[link2](http://jafty.com/blog/tag/change-pivot-point-of-three-js-object/) [link3](http://stackoverflow.com/questions/12746011/three-js-how-do-i-rotate-a-cylinder-around-a-specific-point)
 
-8.
+8. 如何平滑的过渡 THREE.LOOKAT [link](http://stackoverflow.com/questions/30292831/three-js-lookat-how-to-pan-smoothly-between-old-and-new-target-positions) [example](http://jsfiddle.net/pm26kd0t/4/)
 
