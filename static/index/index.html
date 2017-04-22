@@ -128,7 +128,9 @@
   }
 
 
-
+  var Camchangedx = {
+      t1:0
+  }
 
 
 
@@ -147,6 +149,8 @@
 
   //scene
   _self.scene = new THREE.Scene();
+  _self.scene.fog = new THREE.FogExp2( 0xefd1b5, 0.0025);
+
 
 
   // 添加 控件调节

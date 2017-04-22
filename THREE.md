@@ -26,3 +26,5 @@
 9. threejs 的动画尽量不要切换镜头 切换镜头那个 。 实现出来都会有卡顿
 
 10. THREEJS X轴红色 Y轴绿色 Z轴 蓝
+
+11. 发光材质 [link](http://stemkoski.github.io/Three.js/Shader-Glow.html)

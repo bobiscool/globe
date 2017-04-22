@@ -10,6 +10,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.6.0/Tween.min.js"></script>
   <script src="../satellite/ColladaLoader.js"></script>
   <script src="../satellite/trackball.js"></script>
+  <script src="../js/shaders.js"></script>
+
 </head>
 <style>
   body {
@@ -37,7 +39,6 @@
 
 <script>
 
-  <!--->
   console.log(TWEEN);
   var Shaders = {
     'earth' : {
@@ -101,10 +102,13 @@
     sateGroup:null
   }
 
+
   var flag = {
 
   }
 
+  var text1 = "(ಡωಡ)"
+  var tex2 = ""
 
   var Timer = {
       timer1:0,
@@ -121,12 +125,15 @@
     camTween1:null,
     camTween2:null,
     earthTween1:null,
-    camLookat:null
+    camLookat:null,
+    spotLight:null
   }
 
   var Camchange = {
   }
 
+
+  var rotateSpeed = 0.015;
 
 
 
@@ -142,11 +149,12 @@
   _self.camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,10000);
   _self.camera.position.x = 0;
   _self.camera.position.y = 0;
-  _self.camera.position.z = 2000;
+  _self.camera.position.z = 1700;
   _self.camera.rotateY(Math.PI);
 
   //scene
   _self.scene = new THREE.Scene();
+//  _self.scene.fog = new THREE.FogExp2( 0x000000, 0.1 );
 
 
   // 添加 控件调节
@@ -161,9 +169,13 @@
   _self.scene.add(axis);
 
 
-  // 创建环境光
+  // todo 创建环境光
   var surLight = new THREE.AmbientLight(0xffffff);
   _self.scene.add(surLight);
+
+
+
+
 
   // 创建renderer
   _self.renderer=new THREE.WebGLRenderer();
@@ -185,15 +197,47 @@
 
 
   _self.sateGroup = new THREE.Group();
+
+  //todo 创建字体
+//  var Fongeo1 = new THREE.TextGeometry( text1, {
+//
+//    size: 80,
+//    height: 20,
+//    curveSegments: 2
+//  });
+//
+//  Fongeo1.computeBoundingBox();
+//
+//  var centerOffset = -0.5 * ( Fongeo1.boundingBox.max.x - Fongeo1.boundingBox.min.x );
+//
+//  var Fonmat1 =new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, overdraw: 0.5 } );
+//
+//  var FontMesh1= new THREE.Mesh( Fongeo1, Fonmat1 );
+//
+//  FontMesh1.position.set(100,100,100);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   var mesh;
 //todo 加载卫星
   var loder2 = new THREE.ColladaLoader();
   loder2.load("../../static/model/satellite.dae",function (result) {
     _self.satellite= result.scene.children[0].children[0].clone();
-    _self.satellite.scale.set(0.001,0.001,0.001);
+    _self.satellite.scale.set(0.005,0.005,0.005);
 
 
-    _self.satellite.position.set(300,0,1800);
+    _self.satellite.position.set(2000,0,-1000);
 //            _self.satellite.rotation.set(100,100,100);
 
       _self.scene.add(_self.satellite);
@@ -203,15 +247,15 @@
     Tween.satTween =new TWEEN.Tween(_self.satellite.position).to({
       x:0,
       y:0,
-      z:1950
-    },5000);
+      z:1450
+    },3000);
 
 
     Tween.satTween2 = new TWEEN.Tween(_self.satellite.position).to({
       x:0,
-      y:0,
+      y:-130,
       z:0
-    },2000).delay(2000);
+    },4000).delay(2000).easing(TWEEN.Easing.Quintic.Out);
 
     //TODO 相机没有动画！！！
 
@@ -221,21 +265,17 @@
 //    console.log(_self.laser);
 
     //TODO 拉长光柱
-    Tween.lasTween1 = new TWEEN.Tween(_self.laser.scale).to({
-            x:1,
-            y:1,
-            z:1
-    },2000).easing(TWEEN.Easing.
-      Quintic.Out).onUpdate(function () {
-//      console.log("开始z");
-
-    });
+//    Tween.lasTween1 = new TWEEN.Tween(_self.laser.scale).to({
+//            x:0.0001,
+//            y:0.0001,
+//            z:5
+//    },2000);
 
     //TODO 拉大光柱
     Tween.lasTween2 = new TWEEN.Tween(_self.laser.scale).to({
-      x:1,
-      y:1,
-      z:1
+      x:5,
+      y:5,
+      z:5
     },2000).easing(TWEEN.Easing.
       Quintic.Out).onUpdate(function () {
 //      console.log("开始xy");
@@ -244,8 +284,19 @@
 
     //TODO 增加光柱透明度
     Tween.lasTween3 = new TWEEN.Tween(_self.laser.material).to({
-      opacity:0.5
+      opacity:0.3
     },2000).easing(TWEEN.Easing.
+      Quintic.Out).onUpdate(function () {
+//      console.log("透明度");
+    });
+
+    //TODO 变化光柱颜色
+
+    Tween.lasTween4 = new TWEEN.Tween(_self.laser.material.color).to({
+      r:0.31,
+      g:0.80,
+      b:0.77
+    },3000).easing(TWEEN.Easing.
       Quintic.Out).onUpdate(function () {
 //      console.log("透明度");
     });
@@ -253,16 +304,114 @@
     //光柱向前移动
 
 
-    Tween.earthTween1 = new TWEEN.Tween(_self.earth.position).to({
+
+    //TODO 卫星 光线向上
+Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
+  x:0,
+  y:300,
+  z:0
+},4000).easing(TWEEN.Easing.
+  Quintic.Out);
+
+
+    Tween.lasTween5 = new TWEEN.Tween(_self.laser.position).to({
+      x:0,
+      y:295,
+      z:0
+    },4000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+   Tween.earthTween1 = new TWEEN.Tween(_self.earth.position).to({
+      x:0,
+      y:-1100,
+      z:0
+    },4000).onComplete(function () {
+      rotateSpeed=0.01
+    }).easing(TWEEN.Easing.
+     Quintic.Out);
+
+//todo 灯光消失 开始
+
+    Tween.satTween5 = new TWEEN.Tween(_self.satellite.position).to({
+      x:1000,
+      y:500,
+      z:0
+    },4000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+
+    Tween.lasTween6 = new TWEEN.Tween(_self.laser.scale).to({
+      x:0.001,
+      y:0.001,
+      z:0.001
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+    Tween.earthTween2 = new TWEEN.Tween(_self.earth.position).to({
       x:0,
       y:0,
       z:0
-    },5000);
+    },6000).onComplete(function () {
+      rotateSpeed=0.008
+    }).easing(TWEEN.Easing.Back.Out);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //TODO 动画连缀区
+//    Tween.satTween.chain(Tween.satTween2,Tween.earthTween1);
     Tween.satTween.chain(Tween.satTween2);
-    Tween.satTween2.chain(Tween.earthTween1);
+  Tween.satTween2.chain(Tween.lasTween2,Tween.lasTween3);
+    Tween.lasTween2.chain(Tween.lasTween4);
 
+    Tween.lasTween4.chain(Tween.lasTween5,Tween.satTween4, Tween.earthTween1);
+    Tween.lasTween5.chain(Tween.lasTween6,Tween.earthTween2);
+    Tween.lasTween6.chain(Tween.satTween5);
+
+//  Tween.lasTween1.chain(Tween.lasTween2);
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -277,15 +426,22 @@
 
   laser.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, 100 ) );
 
-  var material = new THREE.MeshPhongMaterial({color: 0xffffff,transparent:true,opacity:0});
+  var material = new THREE.MeshPhongMaterial({map:new THREE.TextureLoader().load("../img/transparentTexture.png"),transparent:true,opacity:0.0001});
   _self.laser = new THREE.Mesh(laser, material);
-  _self.laser.position.set(1200,0,0);
+  _self.laser.position.set(0,-135,0);
 
 
-  _self.laser.scale.set(0.01,0.01,0.01);
+  _self.laser.scale.set(0.0001,0.0001,0.0001);
 
   _self.scene.add(_self.laser);
 
+
+  //todo 创建缀光线
+
+//  _self.spotLight = new THREE.SpotLight(0xDD0000,10,1000,Math.PI);
+//  _self.spotLight.position.set(0,-135,0);
+//
+//  _self.scene.add(_self.spotLight);
 
 
   // todo 创建地球
@@ -299,7 +455,7 @@
 //
 //
 //
-//  var EarthMaterial = new THREE.ShaderMaterial({
+//  var EarthMaterial = new THREE.ShadecrMaterial({
 //
 //    uniforms: uniforms,
 //    vertexShader: shader.vertexShader,
@@ -317,8 +473,44 @@
 
   _self.earth = new THREE.Mesh(geometry, mat);
   _self.earth.rotation.y = Math.PI;
-  _self.earth.position.set(0,-1000,0);
+  _self.earth.position.set(0,-1500,0);
   _self.scene.add( _self.earth);
+
+
+
+
+
+
+  //TODO 添加瞄准
+
+  var aimPlane1 = new THREE.Plane(340,340);
+  var aimPlane2 = new THREE.Plane(340,340);
+  var aimPlane1Mat = new THREE.MeshBasicMaterial({
+    map:new THREE.TextureLoader().load("../img/aimAtbig.png")
+  });
+
+  var aimPlane2Mat = new THREE.MeshBasicMaterial({
+    map:new THREE.TextureLoader().load("../img/aimAtsmall.png")
+  });
+
+//
+//  var aimMesh1 = new THREE.Mesh(
+//
+//  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   animate();
@@ -328,15 +520,15 @@
 
 
   function animate() {
-//    var delta = Clock.getDelta();
-//    _self.controls.update(delta);
+    var delta = Clock.getDelta();
+    _self.controls.update(delta);
     TWEEN.update();
 
 
 
     //TODO 地球旋转
 
-    _self.earth.rotation.y +=0.02;
+    _self.earth.rotation.y +=rotateSpeed;
 
 
     requestAnimationFrame(animate);
@@ -356,8 +548,8 @@
 
     //TODO 动画区
 
-    _self.satellite.rotation.x +=0.05;
-    _self.satellite.rotation.y +=0.05;
+    _self.satellite.rotation.y +=0.03;
+//    _self.satellite.rotation.y +=0.03;
 
 
 
