@@ -28,3 +28,5 @@
 10. THREEJS X轴红色 Y轴绿色 Z轴 蓝
 
 11. 发光材质 [link](http://stemkoski.github.io/Three.js/Shader-Glow.html)
+
+12. 如何让TWEEN沿着一个路径变化
