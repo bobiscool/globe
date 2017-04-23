@@ -1,3 +1,4 @@
+<!--Created by WuYiPing -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,19 +103,19 @@
     timer:0,
     vector:null,
     sateGroup:null
-  }
+  };
 
 
   var flag = {
 
-  }
+  };
 
 
   var Timer = {
       timer1:0,
     timer2:0,
     timer3:0
-  }
+  };
 
   var Tween={
       satTween:null,
@@ -127,10 +128,15 @@
     earthTween1:null,
     camLookat:null,
     spotLight:null
-  }
+  };
 
   var Camchange = {
+  };
+
+  var rings = {
+
   }
+
 
   var rotateSpeed = 0.015;
 
@@ -217,6 +223,160 @@
 //
 //  FontMesh1.position.set(100,100,100);
 
+
+
+
+  //todo 创建激光
+
+  var pivot = new THREE.Object3D();
+
+
+  var laser = new THREE.CylinderGeometry(2,50,200,100,100,true);
+  //  var laser = new THREE.CylinderGeometry(2,1,0,100,100,true);
+  laser.rotateX(-Math.PI/2);
+
+  laser.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, 100 ) );
+
+  var material = new THREE.MeshPhongMaterial({map:new THREE.TextureLoader().load("../img/transparentTexture.png"),transparent:true,opacity:0.0001});
+  _self.laser = new THREE.Mesh(laser, material);
+  _self.laser.position.set(0,-135,0);
+
+
+  _self.laser.scale.set(0.0001,0.0001,0.0001);
+
+  _self.scene.add(_self.laser);
+
+
+  //todo 创建缀光线
+
+  //  _self.spotLight = new THREE.SpotLight(0xDD0000,10,1000,Math.PI);
+  //  _self.spotLight.position.set(0,-135,0);
+  //
+  //  _self.scene.add(_self.spotLight);
+
+
+  // todo 创建地球
+
+  var geometry = new THREE.SphereGeometry(600,100,100);
+  var geometry2 = new THREE.SphereGeometry(600,50,50);
+
+  //  var shader = Shaders['earth'];
+  //  var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+
+  //  uniforms['texture'].value = THREE.ImageUtils.loadTexture("../img/earth.jpg");
+  //
+  //
+  //
+  //  var EarthMaterial = new THREE.ShadecrMaterial({
+  //
+  //    uniforms: uniforms,
+  //    vertexShader: shader.vertexShader,
+  //    fragmentShader: shader.fragmentShader
+  //
+  //  });
+
+  // TODO 不用着色器
+
+  var mat = new THREE.MeshLambertMaterial({map:new THREE.TextureLoader().load("../img/earth.jpg")});
+
+
+
+  _self.earth = new THREE.Mesh(geometry, mat);
+//  var frameEarth = new THREE.Mesh(geometry,mat2);
+  _self.earth.rotation.y = Math.PI;
+  _self.earth.position.set(0,-1500,0);
+  _self.scene.add( _self.earth);
+
+
+
+
+
+  var geo = new THREE.SphereGeometry(600+15, 40, 30);
+  var mat2 = new THREE.MeshLambertMaterial({transparent:true, color:0x2AC7CC, blending:THREE.AdditiveBlending, opacity:.4, });
+  var egh2 = new THREE.EdgesHelper( new THREE.Mesh(geo,mat), 0x2AC7CC );
+  egh2.material.linewidth = .5;
+  egh2.material.transparent = true;
+  egh2.material.opacity = .00001;
+  _self.earth.add(egh2);
+
+  var geo3 = new THREE.SphereGeometry(600+15, 20, 30);
+  var mat3 = new THREE.MeshLambertMaterial({transparent:true, color:0x2AC7CC, blending:THREE.AdditiveBlending, opacity:.8, });
+  var egh3 = new THREE.EdgesHelper( new THREE.Mesh(geo3,mat3), 0x2AC7CC );
+  egh3.material.linewidth = .5;
+  egh3.material.transparent = true;
+  egh3.material.opacity = .00001;
+  _self.earth.add(egh3);
+
+  var geo4 = new THREE.SphereGeometry(615, 50, 50);
+  var mat4 = new THREE.MeshLambertMaterial({blending:THREE.AdditiveBlending , transparent:true, color:0x2AC7CC, opacity:0.0001, map: new THREE.TextureLoader().load("../img/earth_alpha.png")});
+ var  earthPol= new THREE.Mesh(geo4,mat4);
+  _self.earth.add(earthPol);
+  var ep2= earthPol.clone();
+  _self.earth.add(ep2);
+
+
+
+
+  //todo 创建扫描仪
+  rings.ring1 = new THREE.Object3D();
+  var r=600+60;
+  var t = Math.PI/180*2;
+  var lineMat = new THREE.LineBasicMaterial({lineWidth:5,color:0x6FD5F0,transparent:true,opacity:0.4});
+
+  var lineGeo = new THREE.Geometry();
+  for(var i=0;i<180;i++){
+      var x = r*Math.cos(i*t);
+      var z = r*Math.sin(i*t);
+
+      lineGeo.vertices.push(new THREE.Vector3(x*0.985,0,z*0.985));
+      lineGeo.vertices.push(new THREE.Vector3(x,0,z));
+
+    if(i%5==0){
+
+      lineGeo.vertices.push(new THREE.Vector3(x*.965,0,z*.965));
+      lineGeo.vertices.push(new THREE.Vector3(x,0,z));
+      lineGeo.vertices.push(new THREE.Vector3(x*.965,0,z*.965));
+      lineGeo.vertices.push(new THREE.Vector3(x,0,z));
+
+    }
+
+    var line = new THREE.LineSegments(lineGeo,lineMat);
+    rings.ring1.add(line);
+
+
+  }
+
+//  rings.ring1.visible = false;
+  rings.ring1.scale.set(0.0001,0.0001,0.0001);
+  rings.ring2=rings.ring1.clone();
+  console.log(rings.ring2);
+//  rings.ring2.material.color="0xcc0000";
+  rings.ring2.rotation.z=Math.PI/4;
+  rings.ring3=rings.ring1.clone();
+  rings.ring3.rotation.z=-Math.PI/4;
+
+  //  rings.ring3.material.color="0xbbee00";
+  _self.scene.add(rings.ring1);
+  _self.scene.add(rings.ring2);
+  _self.scene.add(rings.ring3);
+
+
+
+
+
+
+
+  //TODO 添加瞄准
+
+  var aimPlane1 = new THREE.Plane(340,340);
+  var aimPlane2 = new THREE.Plane(340,340);
+  var aimPlane1Mat = new THREE.MeshBasicMaterial({
+    map:new THREE.TextureLoader().load("../img/aimAtbig.png")
+  });
+
+  var aimPlane2Mat = new THREE.MeshBasicMaterial({
+    map:new THREE.TextureLoader().load("../img/aimAtsmall.png")
+  });
 
 
 
@@ -421,9 +581,6 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
 
 
 
-
-
-
     Tween.sat2Tween2 = new TWEEN.Tween(_self.satellite2.position).to({
       x:0,
       y:-100,
@@ -465,13 +622,19 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
       x:0,
       y:0,
       z:-800
-    },1000);
+    },1000).onComplete(function () {
+//      rings.ring1.visible=true;
+//      Tween.ring1T.start();
+    });
 
     Tween.sat3Tween4 = new TWEEN.Tween(_self.satellite3.position).to({
       x:800,
       y:-1000,
       z:0
-    },1000);
+    },1000).onComplete(function () {
+//      rings.ring2.visible=true;
+//      Tween.ring2T.start();
+    });
 
 
 
@@ -479,9 +642,79 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
       x:0,
       y:0,
       z:700
+    },1000).onComplete(function () {
+//      rings.ring3.visible=true;
+//      Tween.ring3T.start();
+    });
+
+
+
+    //相机上移
+
+    Tween.camTween1 = new TWEEN.Tween(_self.camera.position).to({
+      x:0,
+      y:600,
+      z:1700
+    },3000).easing(TWEEN.Easing.Quintic.Out);
+
+// TODO ring动画
+
+    Tween.ring1T = new TWEEN.Tween(rings.ring1.scale).to({
+      x:1,
+      y:1,
+      z:1
+    },2000).easing(TWEEN.Easing.Bounce.Out);
+
+
+
+    Tween.ring2T = new TWEEN.Tween(rings.ring2.scale).to({
+      x:1,
+      y:1,
+      z:1
+    },2000).easing(TWEEN.Easing.Bounce.Out);
+
+    Tween.ring3T = new TWEEN.Tween(rings.ring3.scale).to({
+      x:1,
+      y:1,
+      z:1
+    },2000).easing(TWEEN.Easing.Bounce.Out);
+
+
+//TODO ting旋转
+    Tween.ring1T2 = new TWEEN.Tween(rings.ring1.rotation).to({
+      x:0,
+      y:0,
+      z:-2*Math.PI
     },1000);
 
 
+
+    Tween.ring2T2 = new TWEEN.Tween(rings.ring2.rotation).to({
+      x:0,
+      y:0,
+      z:-2*Math.PI+Math.PI/4
+    },1000);
+
+    Tween.ring3T2 = new TWEEN.Tween(rings.ring3.rotation).to({
+      x:0,
+      y:0,
+      z:2*Math.PI-Math.PI/4
+    },1000);
+
+//todo 显示 网格以及alpha 以及狙击
+
+    Tween.egh2Tween = new TWEEN.Tween(egh2.material).to({
+   opacity:0.08
+    },6000).easing(TWEEN.Easing.Elastic.InOut);
+
+    Tween.egh3Tween = new TWEEN.Tween(egh3.material).to({
+      opacity:0.15
+    },6000).easing(TWEEN.Easing.Elastic.InOut);
+
+
+    Tween.earthPolTween = new TWEEN.Tween(earthPol.material).to({
+      opacity:0.6
+    },6000).easing(TWEEN.Easing.Elastic.InOut);
 
 
 
@@ -511,11 +744,12 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
     Tween.lasTween4.chain(Tween.lasTween5,Tween.satTween4, Tween.earthTween1);
     Tween.lasTween5.chain(Tween.lasTween6,Tween.earthTween2);
     Tween.lasTween6.chain(Tween.satTween5, Tween.sat2Tween1,Tween.sat3Tween1);
-    Tween.sat3Tween1.chain(Tween.satTween6,Tween.sat2Tween2,Tween.sat3Tween2);
-    Tween.satTween6.chain(Tween.satTween7,Tween.sat2Tween3,Tween.sat3Tween3);
-    Tween.satTween7.chain(Tween.satTween8,Tween.sat2Tween4,Tween.sat3Tween4);
+    Tween.sat3Tween1.chain(Tween.satTween6,Tween.sat2Tween2,Tween.sat3Tween2,Tween.ring1T,Tween.camTween1);
+    Tween.satTween6.chain(Tween.satTween7,Tween.sat2Tween3,Tween.sat3Tween3,Tween.ring2T);
+    Tween.satTween7.chain(Tween.satTween8,Tween.sat2Tween4,Tween.sat3Tween4,Tween.ring3T);
     Tween.satTween8.chain(Tween.satTween5,Tween.sat2Tween5,Tween.sat3Tween5);
-
+    Tween.ring3T.chain(Tween.ring1T2,Tween.ring2T2,Tween.ring3T2);
+    Tween.ring3T2.chain(Tween.egh2Tween,Tween.egh3Tween,Tween.earthPolTween);
 //  Tween.lasTween1.chain(Tween.lasTween2);
   });
 
@@ -542,83 +776,7 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
 
 
 
-  //todo 创建激光
 
-  var pivot = new THREE.Object3D();
-
-
-  var laser = new THREE.CylinderGeometry(2,50,200,100,100,true);
-//  var laser = new THREE.CylinderGeometry(2,1,0,100,100,true);
-  laser.rotateX(-Math.PI/2);
-
-  laser.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, 100 ) );
-
-  var material = new THREE.MeshPhongMaterial({map:new THREE.TextureLoader().load("../img/transparentTexture.png"),transparent:true,opacity:0.0001});
-  _self.laser = new THREE.Mesh(laser, material);
-  _self.laser.position.set(0,-135,0);
-
-
-  _self.laser.scale.set(0.0001,0.0001,0.0001);
-
-  _self.scene.add(_self.laser);
-
-
-  //todo 创建缀光线
-
-//  _self.spotLight = new THREE.SpotLight(0xDD0000,10,1000,Math.PI);
-//  _self.spotLight.position.set(0,-135,0);
-//
-//  _self.scene.add(_self.spotLight);
-
-
-  // todo 创建地球
-
-  var geometry = new THREE.SphereGeometry(600,100,100);
-
-//  var shader = Shaders['earth'];
-//  var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
-
-//  uniforms['texture'].value = THREE.ImageUtils.loadTexture("../img/earth.jpg");
-//
-//
-//
-//  var EarthMaterial = new THREE.ShadecrMaterial({
-//
-//    uniforms: uniforms,
-//    vertexShader: shader.vertexShader,
-//    fragmentShader: shader.fragmentShader
-//
-//  });
-
-  // TODO 不用着色器
-
-  var mat = new THREE.MeshLambertMaterial({map:new THREE.TextureLoader().load("../img/earth.jpg")});
-
-
-
-
-
-  _self.earth = new THREE.Mesh(geometry, mat);
-  _self.earth.rotation.y = Math.PI;
-  _self.earth.position.set(0,-1500,0);
-  _self.scene.add( _self.earth);
-
-
-
-
-
-
-  //TODO 添加瞄准
-
-  var aimPlane1 = new THREE.Plane(340,340);
-  var aimPlane2 = new THREE.Plane(340,340);
-  var aimPlane1Mat = new THREE.MeshBasicMaterial({
-    map:new THREE.TextureLoader().load("../img/aimAtbig.png")
-  });
-
-  var aimPlane2Mat = new THREE.MeshBasicMaterial({
-    map:new THREE.TextureLoader().load("../img/aimAtsmall.png")
-  });
 
 //
 //  var aimMesh1 = new THREE.Mesh(
