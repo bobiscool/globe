@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf1a6d67-4aae-4fbf-88ee-1acfff2c1d6c" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/index/index2.html" afterPath="$PROJECT_DIR$/static/index/index2.html" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -19,14 +20,14 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6051873">
+    <splitter split-orientation="horizontal" split-proportion="0.5778098">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="index2.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/static/index/index2.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="259">
-                  <caret line="707" column="35" lean-forward="true" selection-start-line="707" selection-start-column="35" selection-end-line="707" selection-end-column="35" />
+                <state relative-caret-position="553">
+                  <caret line="857" column="0" lean-forward="true" selection-start-line="857" selection-start-column="0" selection-end-line="857" selection-end-column="0" />
                   <folding>
                     <element signature="e#1014#2433#0" expanded="false" />
                   </folding>
@@ -78,8 +79,8 @@
           <file leaf-file-name="index2.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/static/index/index2.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="298" column="32" lean-forward="false" selection-start-line="298" selection-start-column="32" selection-end-line="298" selection-end-column="32" />
+                <state relative-caret-position="100">
+                  <caret line="300" column="32" lean-forward="false" selection-start-line="300" selection-start-column="32" selection-end-line="300" selection-end-column="32" />
                   <folding>
                     <element signature="e#1014#2433#0" expanded="false" />
                   </folding>
@@ -103,9 +104,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>camera.lookAt</find>
-      <find>Tween</find>
-      <find>rota</find>
       <find>Tween.camTeen2</find>
       <find>position</find>
       <find>camLookat</find>
@@ -133,6 +131,9 @@
       <find>camera.position</find>
       <find>easing</find>
       <find>ring</find>
+      <find>egh2</find>
+      <find>earthPolTween</find>
+      <find>sat2Tween7</find>
     </findStrings>
     <replaceStrings>
       <replace>MeshLambertMaterial</replace>
@@ -555,12 +556,12 @@
       <workItem from="1492582315534" duration="10738000" />
       <workItem from="1492596337062" duration="10594000" />
       <workItem from="1492654896371" duration="26303000" />
-      <workItem from="1492829410382" duration="24168000" />
+      <workItem from="1492829410382" duration="31633000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="205138000" />
+    <option name="totallyTimeSpent" value="212603000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -573,7 +574,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1440" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16335142" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29081634" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1000,8 +1000,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/index/index2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="707" column="35" lean-forward="true" selection-start-line="707" selection-start-column="35" selection-end-line="707" selection-end-column="35" />
+        <state relative-caret-position="553">
+          <caret line="857" column="0" lean-forward="true" selection-start-line="857" selection-start-column="0" selection-end-line="857" selection-end-column="0" />
           <folding>
             <element signature="e#1014#2433#0" expanded="false" />
           </folding>

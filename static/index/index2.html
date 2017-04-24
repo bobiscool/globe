@@ -260,6 +260,8 @@
   var geometry = new THREE.SphereGeometry(600,100,100);
   var geometry2 = new THREE.SphereGeometry(600,50,50);
 
+
+
   //  var shader = Shaders['earth'];
   //  var uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
@@ -360,9 +362,15 @@
   _self.scene.add(rings.ring2);
   _self.scene.add(rings.ring3);
 
+  // todo 添加圆形扫描仪
 
+  var circle = new THREE.CircleGeometry(650,100,0,Math.PI*2);
+  var circleMat = new THREE.MeshBasicMaterial({color:0x3A89C9,opacity:0.0001,transparent:true,side:THREE.DoubleSide});
+  var Circle = new THREE.Mesh(circle,circleMat);
+  Circle.rotation.x = Math.PI/2;
+  rings.ring1.add(Circle);
 
-
+  //
 
 
 
@@ -663,7 +671,7 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
       x:1,
       y:1,
       z:1
-    },2000).easing(TWEEN.Easing.Bounce.Out);
+    },2000);
 
 
 
@@ -671,13 +679,13 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
       x:1,
       y:1,
       z:1
-    },2000).easing(TWEEN.Easing.Bounce.Out);
+    },2000);
 
     Tween.ring3T = new TWEEN.Tween(rings.ring3.scale).to({
       x:1,
       y:1,
       z:1
-    },2000).easing(TWEEN.Easing.Bounce.Out);
+    },2000);
 
 
 //TODO ting旋转
@@ -685,7 +693,9 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
       x:0,
       y:0,
       z:-2*Math.PI
-    },1000);
+    },2000).onStart(function () {
+      rotateSpeed=0;
+    });
 
 
 
@@ -693,33 +703,122 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
       x:0,
       y:0,
       z:-2*Math.PI+Math.PI/4
-    },1000);
+    },2000);
 
     Tween.ring3T2 = new TWEEN.Tween(rings.ring3.rotation).to({
       x:0,
       y:0,
       z:2*Math.PI-Math.PI/4
-    },1000);
+    },2000);
 
 //todo 显示 网格以及alpha 以及狙击
 
     Tween.egh2Tween = new TWEEN.Tween(egh2.material).to({
    opacity:0.08
-    },6000).easing(TWEEN.Easing.Elastic.InOut);
+    },2000).easing(TWEEN.Easing.Elastic.InOut);
 
     Tween.egh3Tween = new TWEEN.Tween(egh3.material).to({
       opacity:0.15
-    },6000).easing(TWEEN.Easing.Elastic.InOut);
+    },2000).easing(TWEEN.Easing.Elastic.InOut);
 
 
     Tween.earthPolTween = new TWEEN.Tween(earthPol.material).to({
-      opacity:0.6
-    },6000).easing(TWEEN.Easing.Elastic.InOut);
+      opacity:0.8
+    },1000).easing(TWEEN.Easing.Elastic.InOut);
+
+//TODO earth2
+
+    Tween.earth2 = new TWEEN.Tween(_self.earth.rotation).to({
+      y:-Math.PI
+    },3000).easing(TWEEN.Easing.Quadratic.Out);
+
+//todo 合并 ring
+    Tween.ring3T3 = new TWEEN.Tween(rings.ring3.rotation).to({
+      x:0,
+      y:0,
+      z:2*Math.PI
+    },1000);
 
 
 
+    Tween.ring2T3 = new TWEEN.Tween(rings.ring2.rotation).to({
+      x:0,
+      y:0,
+      z:-2*Math.PI
+    },1000).onComplete(function () {
+      rings.ring2.visible =false;
+      rings.ring3.visible =false;
+    });
+
+    //TODO 卫星 飞向地球 开始扫描
+
+    Tween.satTween10 = new TWEEN.Tween(_self.satellite.position).to({
+      x:650,
+      y:0,
+      z:0
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
 
 
+    Tween.sat3Tween6 = new TWEEN.Tween(_self.satellite3.position).to({
+      x:0,
+      y:0,
+      z:650
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+
+    Tween.sat2Tween6 = new TWEEN.Tween(_self.satellite2.position).to({
+      x:-650,
+      y:0,
+      z:0
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+    Tween.circle = new TWEEN.Tween(Circle.material).to({
+      opacity:0.7
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+
+// todo 上升
+
+    Tween.satTween11 = new TWEEN.Tween(_self.satellite.position).to({
+      x:650,
+      y:600,
+      z:0
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+
+    Tween.sat3Tween7 = new TWEEN.Tween(_self.satellite3.position).to({
+      x:0,
+      y:600,
+      z:650
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+
+    Tween.sat2Tween7 = new TWEEN.Tween(_self.satellite2.position).to({
+      x:-650,
+      y:600,
+      z:0
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+    Tween.ring1T3 = new TWEEN.Tween(rings.ring1.position).to({
+      x:0,
+      y:600,
+      z:0
+    },1000).easing(TWEEN.Easing.
+      Quintic.Out);
+
+//    Tween.ring1T4 = new TWEEN.Tween(rings.ring1.scale).to({
+//      x:0.1,
+//      y:0.1,
+//      z:0.1
+//    },1000).easing(TWEEN.Easing.
+//      Quintic.Out);
 
 
 
@@ -748,8 +847,16 @@ Tween.satTween4 = new TWEEN.Tween(_self.satellite.position).to({
     Tween.satTween6.chain(Tween.satTween7,Tween.sat2Tween3,Tween.sat3Tween3,Tween.ring2T);
     Tween.satTween7.chain(Tween.satTween8,Tween.sat2Tween4,Tween.sat3Tween4,Tween.ring3T);
     Tween.satTween8.chain(Tween.satTween5,Tween.sat2Tween5,Tween.sat3Tween5);
-    Tween.ring3T.chain(Tween.ring1T2,Tween.ring2T2,Tween.ring3T2);
-    Tween.ring3T2.chain(Tween.egh2Tween,Tween.egh3Tween,Tween.earthPolTween);
+    Tween.ring3T.chain(Tween.ring1T2,Tween.ring2T2,Tween.ring3T2,Tween.earth2);
+    Tween.ring3T2.chain(Tween.egh2Tween,Tween.egh3Tween);
+    Tween.egh3Tween.chain(Tween.ring3T3,Tween.ring2T3);
+    Tween.ring2T3.chain(Tween.sat3Tween6,Tween.sat2Tween6,Tween.satTween10);
+
+    Tween.satTween10.chain(Tween.circle);
+    Tween.circle.chain(Tween.sat3Tween7,Tween.sat2Tween7,Tween.satTween11,Tween.ring1T3,Tween.earthPolTween);
+//    Tween.sat2Tween7.chain(Tween.earthPolTween);
+
+//    Tween.ring1T2.chain(Tween.earth2)
 //  Tween.lasTween1.chain(Tween.lasTween2);
   });
 
